@@ -46,7 +46,7 @@ func save_game(slot: int = -1, description: String = "") -> bool:
 	var save_slot = slot if slot > 0 else current_slot
 	
 	save_started.emit(save_slot)
-	EventManager.get_instance().emit("save_started", save_slot)
+	EventManager.instance.emit("save_started", save_slot)
 	
 	var save_data = _create_save_data(description)
 	var success = _write_save_file(save_slot, save_data)
@@ -57,19 +57,19 @@ func save_game(slot: int = -1, description: String = "") -> bool:
 	
 	is_saving = false
 	save_completed.emit(save_slot, success)
-	EventManager.get_instance().emit("save_completed", save_slot, success)
+	EventManager.instance.emit("save_completed", save_slot, success)
 	
 	return success
 
 func _create_save_data(description: String) -> Dictionary:
-	var player = PlayerData.get_instance()
-	var combat = CombatManager.get_instance()
-	var world = WorldManager.get_instance()
-	var pvp = PvPManager.get_instance()
-	var guild = GuildManager.get_instance()
+	var player = PlayerData.instance
+	var combat = CombatManager.instance
+	var world = WorldManager.instance
+	var pvp = PvPManager.instance
+	var guild = GuildManager.instance
 	
 	var data = {
-		"version": GameData.get_instance().game_version,
+		"version": GameData.instance.game_version,
 		"save_time": Time.get_unix_time_from_system(),
 		"description": description if description != "" else _generate_description(),
 		"player": player.to_dict(),
@@ -77,8 +77,8 @@ func _create_save_data(description: String) -> Dictionary:
 		"pvp": pvp.to_dict(),
 		"guild": guild.to_dict(),
 		"combat": combat.get_battle_state(),
-		"game_settings": AudioManager.get_instance().to_dict(),
-		"ui_state": UIManager.get_instance().to_dict(),
+		"game_settings": AudioManager.instance.to_dict(),
+		"ui_state": UIManager.instance.to_dict(),
 		"system": {
 			"play_time": Time.get_ticks_msec() / 1000,
 			"save_count": save_slots.get(str(save_slot), {"save_count": 0}).save_count + 1
@@ -88,7 +88,7 @@ func _create_save_data(description: String) -> Dictionary:
 	return data
 
 func _generate_description() -> String:
-	var player = PlayerData.get_instance()
+	var player = PlayerData.instance
 	var chapter_names = {
 		1: "初出茅庐", 2: "江湖初闻", 3: "门派抉择", 4: "江湖风云",
 		5: "家国大义", 6: "十大名剑", 7: "魔教现世", 8: "武林大会",
@@ -133,7 +133,7 @@ func load_game(slot: int) -> bool:
 		return false
 	
 	load_started.emit(slot)
-	EventManager.get_instance().emit("load_started", slot)
+	EventManager.instance.emit("load_started", slot)
 	
 	var data = _read_save_file(slot)
 	if not data:
@@ -144,10 +144,10 @@ func load_game(slot: int) -> bool:
 	
 	if success:
 		current_slot = slot
-		EventManager.get_instance().emit("game_loaded", slot)
+		EventManager.instance.emit("game_loaded", slot)
 	
 	load_completed.emit(slot, success)
-	EventManager.get_instance().emit("load_completed", slot, success)
+	EventManager.instance.emit("load_completed", slot, success)
 	
 	return success
 
@@ -167,27 +167,30 @@ func _read_save_file(slot: int) -> Dictionary:
 	return json.get_var()
 
 func _apply_save_data(data: Dictionary) -> bool:
-	try:
-		var player = PlayerData.get_instance()
-		var world = WorldManager.get_instance()
-		var pvp = PvPManager.get_instance()
-		var guild = GuildManager.get_instance()
-		var combat = CombatManager.get_instance()
-		var audio = AudioManager.get_instance()
-		var ui = UIManager.get_instance()
-		
+	var player = PlayerData.instance if "instance" in PlayerData else PlayerData
+	var world = WorldManager.instance if "instance" in WorldManager else WorldManager
+	var pvp = PvPManager.instance if "instance" in PvPManager else PvPManager
+	var guild = GuildManager.instance if "instance" in GuildManager else GuildManager
+	var combat = CombatManager.instance if "instance" in CombatManager else CombatManager
+	var audio = AudioManager.instance if "instance" in AudioManager else AudioManager
+	var ui = UIManager.instance if "instance" in UIManager else UIManager
+	
+	if player and player.has_method("from_dict"):
 		player.from_dict(data.get("player", {}))
+	if world and world.has_method("set_world_state"):
 		world.set_world_state(data.get("world", {}))
+	if pvp and pvp.has_method("from_dict"):
 		pvp.from_dict(data.get("pvp", {}))
+	if guild and guild.has_method("from_dict"):
 		guild.from_dict(data.get("guild", {}))
+	if combat and combat.has_method("from_dict"):
 		combat.from_dict(data.get("combat", {}))
+	if audio and audio.has_method("from_dict"):
 		audio.from_dict(data.get("game_settings", {}))
+	if ui and ui.has_method("from_dict"):
 		ui.from_dict(data.get("ui_state", {}))
-		
-		return true
-	except:
-		push_error("Failed to apply save data")
-		return false
+	
+	return true
 
 func _save_exists(slot: int) -> bool:
 	return FileAccess.file_exists("user://save_%d.sav" % slot)
@@ -197,9 +200,9 @@ func _update_save_slot_info(slot: int, description: String):
 		"slot": slot,
 		"description": description,
 		"save_time": Time.get_unix_time_from_system(),
-		"player_level": PlayerData.get_instance().level,
-		"player_name": PlayerData.get_instance().player_name,
-		"chapter": PlayerData.get_instance().current_chapter,
+		"player_level": PlayerData.instance.level,
+		"player_name": PlayerData.instance.player_name,
+		"chapter": PlayerData.instance.current_chapter,
 		"play_time": Time.get_ticks_msec() / 1000,
 		"save_count": save_slots.get(str(slot), {"save_count": 0}).save_count + 1
 	}
@@ -247,7 +250,7 @@ func auto_save():
 		auto_save_timer = 0
 		save_game(current_slot, "自动存档")
 		auto_save_triggered.emit()
-		EventManager.get_instance().emit("auto_save")
+		EventManager.instance.emit("auto_save")
 
 func update_auto_save_timer(delta: float):
 	auto_save_timer += delta

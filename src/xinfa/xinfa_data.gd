@@ -63,7 +63,7 @@ func _init_defaults():
 		set_effects = {}
 
 func get_qi_cost() -> int:
-	return GameData.get_xinfa_cost(color)
+	return GameData.instance.get_xinfa_cost(color)
 
 func get_stat_bonus_at_level(stat: String, level: int) -> float:
 	var base = stat_bonuses.get(stat, 0)

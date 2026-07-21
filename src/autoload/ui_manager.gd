@@ -324,9 +324,18 @@ func on_resolution_changed():
 			overlay._on_resolution_changed()
 
 func to_dict() -> Dictionary:
+	var visible_ui_stack = []
+	for ui in ui_stack:
+		if ui.visible:
+			visible_ui_stack.append(ui.name)
+			
+	var overlay_names = []
+	for o in overlays:
+		overlay_names.append(o.name)
+		
 	return {
-		"ui_stack": [ui.name for ui in ui_stack if ui.visible],
-		"overlays": [o.name for o in overlays]
+		"ui_stack": visible_ui_stack,
+		"overlays": overlay_names
 	}
 
 func from_dict(data: Dictionary):

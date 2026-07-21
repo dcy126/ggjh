@@ -43,10 +43,10 @@ class_name BattleCharacter
 @export var exclusive_talent: CharacterTalent = null
 
 ## 状态
-@export var status_effects: Array[StatusEffect] = []
-@export var shields: Array[Shield] = []
-@export var buffs: Dictionary = {}
-@export var debuffs: Dictionary = {}
+var status_effects: Array[StatusEffect] = []
+var shields: Array[Shield] = []
+var buffs: Dictionary = {}
+var debuffs: Dictionary = {}
 
 ## 战斗状态标记
 @export var is_dead: bool = false
@@ -80,9 +80,9 @@ class_name BattleCharacter
 @export var shield_gained_this_turn: int = 0
 
 ## 召唤物/幻影/宠物
-@export var summons: Array[Summon] = []
-@export var phantoms: Array[Phantom] = []
-@export var pet: Pet = null
+var summons: Array[Summon] = []
+var phantoms: Array[Phantom] = []
+var pet: Pet = null
 
 ## 变身/特殊形态
 @export var current_form: String = ""
@@ -399,11 +399,19 @@ func get_available_wuxue() -> Array[WuxueData]:
 	var result = []
 	for wuxue_id in known_wuxue:
 		var wuxue = WuxueDatabase.get_wuxue(wuxue_id)
-		if wuxue and wuxue.can_use(self, CombatManager.get_instance()):
+		if wuxue and wuxue.can_use(self, CombatManager.instance):
 			result.append(wuxue)
 	return result
 
 func to_dict() -> Dictionary:
+	var status_arr = []
+	for s in status_effects:
+		status_arr.append(s.to_dict())
+		
+	var shields_arr = []
+	for s in shields:
+		shields_arr.append(s.to_dict())
+		
 	return {
 		"id": character_id,
 		"name": character_name,
@@ -415,8 +423,8 @@ func to_dict() -> Dictionary:
 		"rage": rage,
 		"pos": grid_pos,
 		"team": team,
-		"status": [s.to_dict() for s in status_effects],
-		"shields": [s.to_dict() for s in shields]
+		"status": status_arr,
+		"shields": shields_arr
 	}
 
 func from_dict(data: Dictionary):

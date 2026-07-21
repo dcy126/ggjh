@@ -6,7 +6,7 @@ class_name BattleGrid
 @export var cell_size: float = 100.0
 
 var characters: Array[BattleCharacter] = []
-var grid_data: Array[Array[Dictionary]] = []
+var grid_data: Array[Array] = []
 var traps: Dictionary = {}  # position -> trap_data
 var mines: Dictionary = {}  # position -> mine_data
 var obstacles: Array[Vector2i] = []
@@ -360,10 +360,15 @@ func clear():
 	_init_grid()
 
 func to_dict() -> Dictionary:
+	
+	var characters_arr = []
+	for x in characters:
+		characters_arr.append(x.to_dict())
+		
 	return {
 		"width": width,
 		"height": height,
-		"characters": [c.to_dict() for c in characters],
+		"characters": characters_arr,
 		"traps": traps,
 		"mines": mines,
 		"obstacles": obstacles

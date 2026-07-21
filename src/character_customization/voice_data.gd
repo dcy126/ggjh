@@ -58,7 +58,7 @@ func apply_preset(preset_name: String):
 	if presets.has(preset_name):
 		var preset = presets[preset_name]
 		for key in preset:
-			if has_property(key):
+			if key in self:
 				set(key, preset[key])
 
 func get_voice_description() -> String:
@@ -90,7 +90,7 @@ func to_dict() -> Dictionary:
 
 func from_dict(data: Dictionary) -> VoiceData:
 	for key in data:
-		if has_property(key):
+		if key in self:
 			set(key, data[key])
 	return self
 

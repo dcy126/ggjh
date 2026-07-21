@@ -16,33 +16,33 @@ func _ready():
 	btn_settings.pressed.connect(_on_settings_pressed)
 	btn_exit.pressed.connect(_on_exit_pressed)
 	
-	var save_manager = SaveManager.get_instance()
+	var save_manager = SaveManager.instance
 	var latest = save_manager.get_latest_save()
 	btn_continue.disabled = latest == 0
 	
-	version_label.text = "版本: %s" % GameData.get_instance().game_version
+	version_label.text = "版本: %s" % GameData.instance.game_version
 	
 	if animation_player:
 		animation_player.play("intro")
 
 func _on_new_game_pressed():
-	AudioManager.get_instance().play_sfx("confirm")
-	UIManager.get_instance().open_ui("customization")
+	AudioManager.instance.play_sfx("confirm")
+	UIManager.instance.open_ui("customization")
 
 func _on_continue_pressed():
-	AudioManager.get_instance().play_sfx("confirm")
-	var save_manager = SaveManager.get_instance()
+	AudioManager.instance.play_sfx("confirm")
+	var save_manager = SaveManager.instance
 	var slot = save_manager.get_latest_save()
 	if slot > 0:
 		save_manager.load_game(slot)
 
 func _on_settings_pressed():
-	AudioManager.get_instance().play_sfx("click")
-	UIManager.get_instance().open_ui("settings")
+	AudioManager.instance.play_sfx("click")
+	UIManager.instance.open_ui("settings")
 
 func _on_exit_pressed():
-	AudioManager.get_instance().play_sfx("cancel")
+	AudioManager.instance.play_sfx("cancel")
 	get_tree().quit()
 
 func on_language_changed():
-	version_label.text = "版本: %s" % GameData.get_instance().game_version
+	version_label.text = "版本: %s" % GameData.instance.game_version

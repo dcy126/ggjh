@@ -29,15 +29,15 @@ var is_auto_battle: bool = false
 var battle_speed: float = 1.0
 var skip_animations: bool = false
 
-var on_battle_start: Callable = null
-var on_battle_end: Callable = null
-var on_turn_start: Callable = null
-var on_turn_end: Callable = null
-var on_character_act: Callable = null
-var on_damage_dealt: Callable = null
-var on_heal_done: Callable = null
-var on_status_applied: Callable = null
-var on_character_death: Callable = null
+var on_battle_start: Callable 
+var on_battle_end: Callable 
+var on_turn_start: Callable 
+var on_turn_end: Callable 
+var on_character_act: Callable 
+var on_damage_dealt: Callable 
+var on_heal_done: Callable 
+var on_status_applied: Callable 
+var on_character_death: Callable 
 
 static var instance: CombatManager = null
 
@@ -129,7 +129,7 @@ func setup_battle(player_chars: Array[BattleCharacter], enemy_chars: Array[Battl
 
 func _init_turn_order():
 	turn_order = all_characters.duplicate()
-	turn_order.sort_custom(self, "_compare_qi_speed")
+	turn_order.sort_custom(_compare_qi_speed)
 
 func _compare_qi_speed(a: BattleCharacter, b: BattleCharacter) -> int:
 	if a.qi_speed != b.qi_speed:
@@ -196,7 +196,7 @@ func _process_character_qi_gain(char: BattleCharacter):
 	char.add_qi(qi_gain)
 	char.qi_gained_this_turn += qi_gain
 	
-	log("%s 获得 %d 集气" % [char.character_name, qi_gain])
+	print("%s 获得 %d 集气" % [char.character_name, qi_gain])
 
 func _process_character_action(char: BattleCharacter):
 	char.has_acted = true
@@ -369,7 +369,7 @@ func execute_skill(caster: BattleCharacter, target: BattleCharacter, skill: Wuxu
 	if not caster.is_alive() or not target.is_alive():
 		return
 	
-	log("%s 对 %s 使用了 %s" % [caster.character_name, target.character_name, skill.name])
+	print("%s 对 %s 使用了 %s" % [caster.character_name, target.character_name, skill.name])
 	
 	caster.last_used_wuxue.append(skill.id)
 	caster.current_mp = max(caster.current_mp - skill.mp_cost, 0)
@@ -406,7 +406,7 @@ func _apply_skill_effect(caster: BattleCharacter, target: BattleCharacter, skill
 	var final_hit = hit_chance - dodge_chance + 0.5
 	
 	if rng.randf_range(0.0, 1.0) > final_hit:
-		log("%s 闪避了 %s 的攻击" % [target.character_name, caster.character_name])
+		print("%s 闪避了 %s 的攻击" % [target.character_name, caster.character_name])
 		trigger_counter(target, caster)
 		return
 	
@@ -424,13 +424,13 @@ func _apply_skill_effect(caster: BattleCharacter, target: BattleCharacter, skill
 		
 		if is_crit:
 			damage = int(damage * caster.get_total_crit_damage())
-			log("暴击！")
+			print("暴击！")
 		
 		var actual_damage = target.take_damage(damage, skill.damage_type, caster, is_crit)
 		caster.damage_dealt_this_turn += actual_damage
 		target.damage_taken_this_turn += actual_damage
 		
-		log("%s 造成了 %d 点 %s 伤害" % [caster.character_name, actual_damage, skill.damage_type])
+		print("%s 造成了 %d 点 %s 伤害" % [caster.character_name, actual_damage, skill.damage_type])
 		
 		if on_damage_dealt:
 			on_damage_dealt.call(caster, target, actual_damage, skill.damage_type, is_crit)
@@ -440,7 +440,7 @@ func _apply_skill_effect(caster: BattleCharacter, target: BattleCharacter, skill
 		var actual_heal = target.heal(heal, caster)
 		caster.heal_done_this_turn += actual_heal
 		
-		log("%s 治疗了 %s %d 点血量" % [caster.character_name, target.character_name, actual_heal])
+		print("%s 治疗了 %s %d 点血量" % [caster.character_name, target.character_name, actual_heal])
 		
 		if on_heal_done:
 			on_heal_done.call(caster, target, actual_heal)
@@ -450,7 +450,7 @@ func _apply_skill_effect(caster: BattleCharacter, target: BattleCharacter, skill
 		var sh = target.add_shield(shield, "技能", 2, caster)
 		caster.shield_gained_this_turn += shield
 		
-		log("%s 为 %s 提供了 %d 点护盾" % [caster.character_name, target.character_name, shield])
+		print("%s 为 %s 提供了 %d 点护盾" % [caster.character_name, target.character_name, shield])
 	
 	for effect in skill.effects:
 		var se = effect.duplicate()
@@ -476,7 +476,7 @@ func execute_basic_attack(caster: BattleCharacter, target: BattleCharacter):
 	var final_hit = hit_chance - dodge_chance + 0.5
 	
 	if rng.randf_range(0.0, 1.0) > final_hit:
-		log("%s 闪避了 %s 的普通攻击" % [target.character_name, caster.character_name])
+		print("%s 闪避了 %s 的普通攻击" % [target.character_name, caster.character_name])
 		trigger_counter(target, caster)
 		return
 	
@@ -493,7 +493,7 @@ func execute_basic_attack(caster: BattleCharacter, target: BattleCharacter):
 	
 	var actual_damage = target.take_damage(damage, damage_type, caster, is_crit)
 	
-	log("%s 对 %s 进行了普通攻击，造成 %d 点 %s 伤害" % [caster.character_name, target.character_name, actual_damage, damage_type])
+	print("%s 对 %s 进行了普通攻击，造成 %d 点 %s 伤害" % [caster.character_name, target.character_name, actual_damage, damage_type])
 
 func trigger_counter(defender: BattleCharacter, attacker: BattleCharacter):
 	if not defender.is_alive() or not attacker.is_alive():
@@ -501,7 +501,7 @@ func trigger_counter(defender: BattleCharacter, attacker: BattleCharacter):
 	
 	var counter_chance = defender.get_total_stat("counter_chance")
 	if rng.randf_range(0.0, 1.0) < counter_chance:
-		log("%s 触发了反击！" % defender.character_name)
+		print("%s 触发了反击！" % defender.character_name)
 		execute_basic_attack(defender, attacker)
 
 func _process_combo_and_chase(caster: BattleCharacter, skill: WuxueData):
@@ -515,7 +515,7 @@ func _process_combo_and_chase(caster: BattleCharacter, skill: WuxueData):
 		var target = _find_chase_target(caster)
 		if target:
 			execute_basic_attack(caster, target)
-			log("%s 触发了追击！" % caster.character_name)
+			print("%s 触发了追击！" % caster.character_name)
 
 func _find_chase_target(caster: BattleCharacter) -> BattleCharacter:
 	var enemies = get_enemies(caster.team)
@@ -539,7 +539,7 @@ func move_character(char: BattleCharacter, target_pos: Vector2i) -> bool:
 	var success = battle_grid.move_character(char, target_pos)
 	if success:
 		char.has_moved = true
-		log("%s 移动到 (%d, %d)" % [char.character_name, target_pos.x, target_pos.y])
+		print("%s 移动到 (%d, %d)" % [char.character_name, target_pos.x, target_pos.y])
 		
 		# 触发踩陷阱等
 		battle_grid.check_hazards(target_pos, char)
@@ -595,7 +595,7 @@ func _increment_timestamp(amount: int):
 				char.add_rage(1)
 
 func _time_up():
-	log("时序耗尽，战斗失败")
+	print("时序耗尽，战斗失败")
 	battle_state = "失败"
 	battle_result = "time_up"
 	_end_battle()
@@ -630,7 +630,7 @@ func apply_formation_bonuses(formation_name: String):
 		formation_system.apply(formation, player_team)
 		formation_system.apply(formation, enemy_team)
 
-func log(message: String):
+func print(message: String):
 	var log_entry = "[T%d][%d] %s" % [current_turn, current_timestamp, message]
 	battle_log.append(log_entry)
 	print(log_entry)
@@ -685,7 +685,7 @@ func summon_unit(team: int, summon_id: String, pos: Vector2i, duration: int):
 	else:
 		enemy_team.append(summon)
 	
-	log("召唤了 %s" % summon.name)
+	print("召唤了 %s" % summon.name)
 
 func summon_phantom(caster: BattleCharacter, count: int, duration: int):
 	for i in range(count):
@@ -704,26 +704,33 @@ func summon_phantom(caster: BattleCharacter, count: int, duration: int):
 			else:
 				enemy_team.append(phantom)
 			caster.phantoms.append(phantom)
-			log("%s 召唤了幻影分身" % caster.character_name)
+			print("%s 召唤了幻影分身" % caster.character_name)
 
 func place_trap(team: int, pos: Vector2i, trap_type: String, duration: int):
 	battle_grid.add_trap(pos, trap_type)
-	log("%d 方在 (%d, %d) 放置了机关" % [team, pos.x, pos.y])
+	print("%d 方在 (%d, %d) 放置了机关" % [team, pos.x, pos.y])
 
 func place_mine(team: int, pos: Vector2i, damage: int, duration: int):
 	battle_grid.add_mine(pos, damage)
-	log("%d 方在 (%d, %d) 埋设了地雷" % [team, pos.x, pos.y])
+	print("%d 方在 (%d, %d) 埋设了地雷" % [team, pos.x, pos.y])
 
 static func get_instance() -> CombatManager:
 	return instance
 
 func get_battle_state() -> Dictionary:
+	var player_team_arr = []
+	for s in player_team_arr:
+		player_team_arr.append(s.to_dict())
+		
+	var enemy_team_arr = []
+	for s in enemy_team:
+		enemy_team_arr.append(s.to_dict())
 	return {
 		"turn": current_turn,
 		"timestamp": current_timestamp,
 		"state": battle_state,
 		"result": battle_result,
-		"player_team": [c.to_dict() for c in player_team],
-		"enemy_team": [c.to_dict() for c in enemy_team],
+		"player_team": player_team_arr,
+		"enemy_team": enemy_team_arr,
 		"log": battle_log
 	}

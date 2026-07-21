@@ -1,6 +1,8 @@
 extends Node
 class_name GameData
 
+static var instance: GameData = null
+
 @export var game_version: String = "3.8.0"
 @export var game_name: String = "汉家江湖"
 @export var developer: String = "汉家松鼠"
@@ -166,6 +168,7 @@ const ROGUELIKE_BOSS_INTERVAL: int = 10
 const EVENT_TYPES: Array[String] = ["日常", "周常", "限时", "节日", "周年庆", "版本更新", "联动", "跨服", "帮会", "论剑赛季"]
 
 func _init():
+	instance = self
 	_init_potential_exp()
 
 func _init_potential_exp():

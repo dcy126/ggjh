@@ -62,7 +62,7 @@ func apply_shared_effects(formation_data: Dictionary, team_chars: Array[BattleCh
 			"共享护盾":
 				var total_shield = 0
 				for member in formation_members:
-					total_shield += member.shields.size() > 0 ? member.shields[0].amount : 0
+					total_shield += member.shields[0].amount if member.shields.size() > 0 else 0
 				var avg_shield = total_shield / max(formation_members.size(), 1)
 				for member in formation_members:
 					member.add_shield(int(avg_shield * effect.get("multiplier", 1.0)), "阵法", 2)
@@ -133,10 +133,15 @@ func on_member_joined(new_member: BattleCharacter):
 		new_member.add_temp_stat(buff_type, active_buffs[buff_type])
 
 func get_formation_info() -> Dictionary:
+	
+	var members_arr = []
+	for x in formation_members:
+		members_arr.append(x.character_name)
+		
 	return {
 		"id": formation_id,
 		"name": name,
-		"members": [m.character_name for m in formation_members],
+		"members": members_arr,
 		"buffs": active_buffs,
 		"positions": positions
 	}

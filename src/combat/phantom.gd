@@ -85,7 +85,7 @@ func on_turn_start():
 func expire():
 	die()
 
-func act(battle: 'CombatManager'):
+func act(battle: CombatManager):
 	if not is_alive():
 		return
 	
@@ -97,7 +97,7 @@ func act(battle: 'CombatManager'):
 		"protect_owner":
 			protect_owner(battle)
 
-func attack_owner_target(battle: 'CombatManager'):
+func attack_owner_target(battle: CombatManager):
 	if not owner or not owner.is_alive():
 		attack_nearest(battle)
 		return
@@ -116,7 +116,7 @@ func attack_owner_target(battle: 'CombatManager'):
 	else:
 		attack_nearest(battle)
 
-func protect_owner(battle: 'CombatManager'):
+func protect_owner(battle: CombatManager):
 	if not owner or not owner.is_alive():
 		return
 	
@@ -140,7 +140,7 @@ func protect_owner(battle: 'CombatManager'):
 		if grid.is_valid_position(target_pos) and grid.is_walkable(target_pos):
 			grid.move_character(self, target_pos)
 
-func attack_nearest(battle: 'CombatManager'):
+func attack_nearest(battle: CombatManager):
 	var nearest = null
 	var min_dist = 999
 	for enemy in battle.get_enemies(team):
@@ -168,7 +168,7 @@ func can_reach_target(target: BattleCharacter) -> bool:
 			range = max(range, skill.range_max)
 	return grid_pos.distance_to(target.grid_pos) <= range
 
-func get_usable_skill(battle: 'CombatManager') -> String:
+func get_usable_skill(battle: CombatManager) -> String:
 	var usable = []
 	for skill_id in skills:
 		var skill = WuxueDatabase.get_wuxue(skill_id)

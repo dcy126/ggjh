@@ -60,7 +60,7 @@ func expire():
 	current_hp = 0
 	die()
 
-func act(battle: 'CombatManager'):
+func act(battle: CombatManager):
 	if not is_alive():
 		return
 	
@@ -74,7 +74,7 @@ func act(battle: 'CombatManager'):
 		"random":
 			random_action(battle)
 
-func attack_nearest(battle: 'CombatManager'):
+func attack_nearest(battle: CombatManager):
 	var nearest = null
 	var min_dist = 999
 	for enemy in battle.get_enemies(team):
@@ -95,7 +95,7 @@ func attack_nearest(battle: 'CombatManager'):
 		# 普通攻击
 		battle.execute_basic_attack(self, nearest)
 
-func support_owner(battle: 'CombatManager'):
+func support_owner(battle: CombatManager):
 	if owner and owner.is_alive():
 		if owner.current_hp < owner.max_hp * 0.5:
 			var heal_skill = get_heal_skill()
@@ -110,11 +110,11 @@ func support_owner(battle: 'CombatManager'):
 	
 	attack_nearest(battle)
 
-func guard_position(battle: 'CombatManager'):
+func guard_position(battle: CombatManager):
 	# 待在原地，攻击进入范围的敌人
 	pass
 
-func random_action(battle: 'CombatManager'):
+func random_action(battle: CombatManager):
 	var actions = ["move", "attack", "skill", "wait"]
 	var action = actions[randi() % actions.size()]
 	# 实现随机行为

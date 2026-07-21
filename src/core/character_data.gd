@@ -80,9 +80,9 @@ class_name CharacterData
 @export var bond_levels: Dictionary = {}
 
 ## 捏脸数据
-@export var face_data: FaceData = null
-@export var body_data: BodyData = null
-@export var voice_data: VoiceData = null
+var face_data: FaceData = null
+var body_data: BodyData = null
+var voice_data: VoiceData = null
 
 ## 战斗相关
 @export var ai_priority: Dictionary = {}
@@ -156,7 +156,7 @@ func set_breakthrough(level: int):
 
 func can_equip_xinfa(xinfa_data: XinfaData) -> bool:
 	var current_cost = calculate_current_qi_cost()
-	var new_cost = current_cost + GameData.get_xinfa_cost(xinfa_data.color)
+	var new_cost = current_cost + GameData.instance.get_xinfa_cost(xinfa_data.color)
 	return new_cost <= max_qi_value
 
 func calculate_current_qi_cost() -> int:
@@ -164,9 +164,9 @@ func calculate_current_qi_cost() -> int:
 	for slot_id in equipped_xinfa:
 		var xinfa_id = equipped_xinfa[slot_id]
 		if xinfa_id:
-			var xinfa = XinfaDatabase.get_xinfa(xinfa_id)
+			var xinfa = XinfaDatabase.instance.get_xinfa(xinfa_id)
 			if xinfa:
-				total += GameData.get_xinfa_cost(xinfa.color)
+				total += GameData.instance.get_xinfa_cost(xinfa.color)
 	return total
 
 func get_available_xinfa_slots() -> Array[String]:

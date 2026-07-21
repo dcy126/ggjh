@@ -104,7 +104,7 @@ func start_combo(caster: BattleCharacter, combat: CombatManager):
 	for i in range(steps.size()):
 		var step = steps[i]
 		var step_actor_id = step.get("actor", "caster")
-		var step_target = step.get("target", "target")
+		var step_target_id = step.get("target", "target")
 		var step_skill_id = step.get("skill", "")
 		var step_delay = step.get("delay", 0)
 		
@@ -116,12 +116,12 @@ func start_combo(caster: BattleCharacter, combat: CombatManager):
 					break
 		
 		var step_target = target
-		if step_target != "target":
-			if step_target == "nearest_enemy":
+		if step_target_id != "target":
+			if step_target_id == "nearest_enemy":
 				step_target = combat.get_nearest_enemy(step_actor)
-			elif step_target == "lowest_hp_ally":
+			elif step_target_id == "lowest_hp_ally":
 				step_target = combat.get_lowest_hp_ally(step_actor.team)
-			elif step_target == "highest_hp_enemy":
+			elif step_target_id == "highest_hp_enemy":
 				step_target = combat.get_highest_hp_enemy(step_actor.team)
 		
 		if step_actor and step_actor.is_alive() and step_target and step_target.is_alive():
@@ -177,7 +177,7 @@ func apply_bonus_effects(caster: BattleCharacter, combat: CombatManager):
 				"buff":
 					var se = StatusEffect.new()
 					se.effect_type = effect.get("buff_type", "属性加成")
-					se.params = effect.params = effect.get("params", {})
+					se.params = effect.get("params", {})
 					se.duration = eff_duration
 					target_char.apply_status_effect(se)
 				"debuff_enemy":

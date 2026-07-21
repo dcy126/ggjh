@@ -179,7 +179,7 @@ func get_description() -> String:
 	
 	return desc
 
-func check_conditions(caster: 'BattleCharacter', target: 'BattleCharacter', battle: 'CombatManager') -> bool:
+func check_conditions(caster: BattleCharacter, target: BattleCharacter, battle: CombatManager) -> bool:
 	for cond in conditions:
 		var cond_type = cond.get("type", "")
 		var cond_value = cond.get("value", 0)
@@ -235,7 +235,7 @@ func check_conditions(caster: 'BattleCharacter', target: 'BattleCharacter', batt
 					return false
 	return true
 
-func apply(caster: 'BattleCharacter', target: 'BattleCharacter', battle: 'CombatManager'):
+func apply(caster: BattleCharacter, target: BattleCharacter, battle: CombatManager):
 	if not check_conditions(caster, target, battle):
 		return
 	
@@ -261,7 +261,7 @@ func apply(caster: 'BattleCharacter', target: 'BattleCharacter', battle: 'Combat
 				actual_heal += int(caster.spd * params.get("scaling_mult", 0.5))
 			target.heal(actual_heal, caster)
 		"护盾":
-			target.add_shield(params.get("value", 0), duration)
+			target.add_shield(params.get("value", 0), "通用",duration)
 		"加怒气":
 			target.gain_rage(params.get("value", 0))
 		"减怒气":

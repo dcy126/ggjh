@@ -307,7 +307,7 @@ func trigger_effect(target: BattleCharacter, trigger_source: BattleCharacter = n
 		"援护":
 			target.add_temp_stat("aid_chance", params.get("value", 0.3) * current_stacks)
 		"挡刀":
-			target.add_temp_stat("block_forced_block_target(params.get("target_id", "")))
+			target.add_temp_stat("block_forced", block_target(params.get("target_id", "")))
 		"清除增益":
 			target.clear_buffs()
 		"清除减益":

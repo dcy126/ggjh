@@ -97,7 +97,7 @@ func level_up():
 	crit += int(crit * 0.02)
 	current_hp = max_hp
 
-func act(battle: 'CombatManager'):
+func act(battle: CombatManager):
 	if not is_alive():
 		return
 	
@@ -113,7 +113,7 @@ func act(battle: 'CombatManager'):
 		"passive":
 			pass
 
-func follow_owner(battle: 'CombatManager'):
+func follow_owner(battle: CombatManager):
 	if not owner or not owner.is_alive():
 		attack_nearest(battle)
 		return
@@ -130,7 +130,7 @@ func follow_owner(battle: 'CombatManager'):
 			attack_enemy(enemy, battle)
 			return
 
-func guard_owner(battle: 'CombatManager'):
+func guard_owner(battle: CombatManager):
 	if not owner or not owner.is_alive():
 		return
 	
@@ -147,7 +147,7 @@ func guard_owner(battle: 'CombatManager'):
 			attack_enemy(enemy, battle)
 			return
 
-func support_owner(battle: 'CombatManager'):
+func support_owner(battle: CombatManager):
 	if not owner or not owner.is_alive():
 		return
 	
@@ -171,7 +171,7 @@ func support_owner(battle: 'CombatManager'):
 	# 没有支援技能，跟随
 	follow_owner(battle)
 
-func attack_nearest(battle: 'CombatManager'):
+func attack_nearest(battle: CombatManager):
 	var nearest = null
 	var min_dist = 999
 	for enemy in battle.get_enemies(team):
@@ -184,7 +184,7 @@ func attack_nearest(battle: 'CombatManager'):
 	if nearest:
 		attack_enemy(nearest, battle)
 
-func attack_enemy(target: BattleCharacter, battle: 'CombatManager'):
+func attack_enemy(target: BattleCharacter, battle: CombatManager):
 	var skill_id = get_usable_skill(battle)
 	if skill_id:
 		var skill = WuxueDatabase.get_wuxue(skill_id)
@@ -194,7 +194,7 @@ func attack_enemy(target: BattleCharacter, battle: 'CombatManager'):
 	
 	battle.execute_basic_attack(self, target)
 
-func get_usable_skill(battle: 'CombatManager') -> String:
+func get_usable_skill(battle: CombatManager) -> String:
 	var usable = []
 	for skill_id in skills:
 		var skill = WuxueDatabase.get_wuxue(skill_id)

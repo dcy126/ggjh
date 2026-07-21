@@ -126,12 +126,17 @@ func execute(combat: CombatManager):
 				combat.combo_system.execute_combo_step(actor, combo_data, combo_step)
 
 func to_dict() -> Dictionary:
+	
+	var targets_arr = []
+	for x in targets:
+		targets_arr.append(x.character_id)
+		
 	return {
 		"id": action_id,
 		"type": action_type,
 		"actor": actor.character_id if actor else "",
 		"target": target.character_id if target else "",
-		"targets": [t.character_id for t in targets],
+		"targets": targets_arr,
 		"skill": skill.id if skill else "",
 		"position": target_position,
 		"priority": priority,

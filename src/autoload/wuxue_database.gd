@@ -654,69 +654,69 @@ func _create_xinfa_wuxue():
 
 func _create_sect_wuxue():
 	# 恒山派 - 反击流
-	_create_sect_wuxue("hengshan", "恒山派", [
+	_create_sect_wuxue_branch("hengshan", "恒山派", [
 		{"id": "hengshan_fanji", "name": "恒山反击剑", "type": "剑法", "quality": "紫", "damage_type": "外功", "target_type": "单体", "range_min": 1, "range_max": 1, "mp_cost": 10, "rage_cost": 0, "qi_cost": 0, "cooldown": 2, "timestamp_offset": 0, "description": "反击概率提升"},
 		{"id": "hengshan_wuliang", "name": "无量剑意", "type": "剑法", "quality": "金", "damage_type": "外功", "target_type": "十字", "range_min": 1, "range_max": 2, "mp_cost": 20, "rage_cost": 10, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "全方位反击"},
 		{"id": "hengshan_hengshan", "name": "恒山剑法", "type": "剑法", "quality": "蓝", "damage_type": "外功", "target_type": "横排", "range_min": 1, "range_max": 3, "mp_cost": 5, "rage_cost": 0, "qi_cost": 0, "cooldown": 1, "timestamp_offset": 0, "description": "基础剑法"},
 	])
 	
 	# 华山派 - 阴阳内气
-	_create_sect_wuxue("huashan", "华山派", [
+	_create_sect_wuxue_branch("huashan", "华山派", [
 		{"id": "huashan_yinyang", "name": "阴阳内气", "type": "内功", "quality": "金", "damage_type": "内功", "target_type": "自身", "range_min": 1, "range_max": 1, "mp_cost": 15, "rage_cost": 0, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "阴阳转换"},
 		{"id": "huashan_fengyin", "name": "封印剑气", "type": "剑法", "quality": "紫", "damage_type": "内功", "target_type": "竖排", "range_min": 1, "range_max": 3, "mp_cost": 15, "rage_cost": 5, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "封印敌人技能"},
 		{"id": "huashan_jianqi", "name": "华山剑气", "type": "剑法", "quality": "蓝", "damage_type": "外功", "target_type": "单体", "range_min": 1, "range_max": 1, "mp_cost": 10, "rage_cost": 0, "qi_cost": 0, "cooldown": 2, "timestamp_offset": 0, "description": "基础剑气"},
 	])
 	
 	# 刀魔传人 - 魔刀/佛刀
-	_create_sect_wuxue("daomo", "刀魔传人", [
+	_create_sect_wuxue_branch("daomo", "刀魔传人", [
 		{"id": "daomo_modao", "name": "魔刀·嗜血", "type": "刀法", "quality": "金", "damage_type": "外功", "target_type": "单体", "range_min": 1, "range_max": 1, "mp_cost": 20, "rage_cost": 15, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "吸血狂暴"},
 		{"id": "daomo_fodao", "name": "佛刀·渡厄", "type": "刀法", "quality": "金", "damage_type": "外功", "target_type": "横排", "range_min": 1, "range_max": 3, "mp_cost": 20, "rage_cost": 10, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "格挡援护"},
 		{"id": "daomo_daofa", "name": "刀魔心法", "type": "内功", "quality": "紫", "damage_type": "内功", "target_type": "自身", "range_min": 1, "range_max": 1, "mp_cost": 0, "rage_cost": 0, "qi_cost": 0, "cooldown": 0, "timestamp_offset": 0, "description": "魔佛切换"},
 	])
 	
 	# 河洛帮 - 召唤/回血/输出
-	_create_sect_wuxue("heluo", "河洛帮", [
+	_create_sect_wuxue_branch("heluo", "河洛帮", [
 		{"id": "heluo_zhaohuan", "name": "河洛召唤", "type": "机关", "quality": "金", "damage_type": "外功", "target_type": "自身", "range_min": 1, "range_max": 1, "mp_cost": 25, "rage_cost": 0, "qi_cost": 0, "cooldown": 4, "timestamp_offset": 0, "description": "召唤帮众"},
 		{"id": "heluo_huixue", "name": "帮众回血", "type": "医术", "quality": "紫", "damage_type": "内功", "target_type": "友方全体", "range_min": 1, "range_max": 1, "mp_cost": 20, "rage_cost": 0, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "群体治疗"},
 		{"id": "heluo_bangfa", "name": "帮派棒法", "type": "棍法", "quality": "蓝", "damage_type": "外功", "target_type": "菱形", "range_min": 1, "range_max": 2, "mp_cost": 10, "rage_cost": 5, "qi_cost": 0, "cooldown": 2, "timestamp_offset": 0, "description": "群体输出"},
 	])
 	
 	# 铁石岛 - 重剑击退/剑气内伤
-	_create_sect_wuxue("tieshi", "铁石岛", [
+	_create_sect_wuxue_branch("tieshi", "铁石岛", [
 		{"id": "tieshi_zhongjian", "name": "重剑无锋", "type": "剑法", "quality": "金", "damage_type": "外功", "target_type": "单体", "range_min": 1, "range_max": 1, "mp_cost": 25, "rage_cost": 15, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "击退破盾"},
 		{"id": "tieshi_jianqi", "name": "剑气内伤", "type": "剑法", "quality": "紫", "damage_type": "内功", "target_type": "竖排", "range_min": 1, "range_max": 3, "mp_cost": 20, "rage_cost": 10, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "无视防御内伤"},
 		{"id": "tieshi_tieshi", "name": "铁石心法", "type": "内功", "quality": "蓝", "damage_type": "内功", "target_type": "自身", "range_min": 1, "range_max": 1, "mp_cost": 0, "rage_cost": 0, "qi_cost": 0, "cooldown": 0, "timestamp_offset": 0, "description": "重剑护体"},
 	])
 	
 	# 天武 - 强化肉身/破甲碎盾
-	_create_sect_wuxue("tianwu", "天武", [
+	_create_sect_wuxue_branch("tianwu", "天武", [
 		{"id": "tianwu_roushen", "name": "金钟罩铁布衫", "type": "内功", "quality": "金", "damage_type": "内功", "target_type": "自身", "range_min": 1, "range_max": 1, "mp_cost": 30, "rage_cost": 0, "qi_cost": 0, "cooldown": 5, "timestamp_offset": 0, "description": "肉身成圣"},
 		{"id": "tianwu_pojia", "name": "破甲碎盾", "type": "拳掌", "quality": "紫", "damage_type": "外功", "target_type": "十字", "range_min": 1, "range_max": 2, "mp_cost": 20, "rage_cost": 15, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "破防破盾"},
 		{"id": "tianwu_tianwu", "name": "天武枪法", "type": "枪法", "quality": "蓝", "damage_type": "外功", "target_type": "横排", "range_min": 1, "range_max": 3, "mp_cost": 10, "rage_cost": 5, "qi_cost": 0, "cooldown": 2, "timestamp_offset": 0, "description": "军阵枪法"},
 	])
 	
 	# 八大门 - 幻影/控制流
-	_create_sect_wuxue("bada", "八大门", [
+	_create_sect_wuxue_branch("bada", "八大门", [
 		{"id": "bada_huanying", "name": "幻影迷踪", "type": "轻功", "quality": "金", "damage_type": "内功", "target_type": "自身", "range_min": 1, "range_max": 1, "mp_cost": 25, "rage_cost": 0, "qi_cost": 0, "cooldown": 4, "timestamp_offset": 0, "description": "分身闪避"},
 		{"id": "bada_kongzhi", "name": "迷魂阵", "type": "琴音", "quality": "紫", "damage_type": "内功", "target_type": "菱形", "range_min": 1, "range_max": 2, "mp_cost": 20, "rage_cost": 10, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "群体控制"},
 		{"id": "bada_bada", "name": "八大门轻功", "type": "轻功", "quality": "蓝", "damage_type": "内功", "target_type": "自身", "range_min": 1, "range_max": 1, "mp_cost": 5, "rage_cost": 0, "qi_cost": 0, "cooldown": 1, "timestamp_offset": 0, "description": "移动闪避"},
 	])
 	
 	# 南山派 - 一波流/高伤龙拳
-	_create_sect_wuxue("nanshan", "南山派", [
+	_create_sect_wuxue_branch("nanshan", "南山派", [
 		{"id": "nanshan_longquan", "name": "龙拳绝杀", "type": "拳掌", "quality": "金", "damage_type": "外功", "target_type": "单体", "range_min": 1, "range_max": 1, "mp_cost": 30, "rage_cost": 20, "qi_cost": 0, "cooldown": 4, "timestamp_offset": 0, "description": "龙拳爆发"},
 		{"id": "nanshan_yibo", "name": "一波流心法", "type": "内功", "quality": "紫", "damage_type": "内功", "target_type": "自身", "range_min": 1, "range_max": 1, "mp_cost": 20, "rage_cost": 0, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "聚气爆发"},
 		{"id": "nanshan_nanshan", "name": "南山拳法", "type": "拳掌", "quality": "蓝", "damage_type": "外功", "target_type": "横排", "range_min": 1, "range_max": 3, "mp_cost": 10, "rage_cost": 5, "qi_cost": 0, "cooldown": 2, "timestamp_offset": 0, "description": "连环拳"},
 	])
 	
 	# 不器门 - 机关地雷/毒术折磨
-	_create_sect_wuxue("buqi", "不器门", [
+	_create_sect_wuxue_branch("buqi", "不器门", [
 		{"id": "buqi_jiguan", "name": "机关术", "type": "机关", "quality": "金", "damage_type": "外功", "target_type": "指定", "range_min": 1, "range_max": 3, "mp_cost": 20, "rage_cost": 10, "qi_cost": 0, "cooldown": 3, "timestamp_offset": 0, "description": "布置机关"},
 		{"id": "buqi_dilei", "name": "地雷阵", "type": "机关", "quality": "紫", "damage_type": "外功", "target_type": "菱形", "range_min": 2, "range_max": 3, "mp_cost": 25, "rage_cost": 15, "qi_cost": 0, "cooldown": 4, "timestamp_offset": 0, "description": "延时爆炸"},
 		{"id": "buqi_dushu", "name": "毒术折磨", "type": "毒术", "quality": "蓝", "damage_type": "内功", "target_type": "十字", "range_min": 1, "range_max": 2, "mp_cost": 15, "rage_cost": 5, "qi_cost": 0, "cooldown": 2, "timestamp_offset": 0, "description": "持续伤害"},
 	])
 
-func _create_sect_wuxue(sect_id: String, sect_name: String, wuxue_list: Array[Dictionary]):
+func _create_sect_wuxue_branch(sect_id: String, sect_name: String, wuxue_list: Array[Dictionary]):
 	if not sect_wuxue.has(sect_id):
 		sect_wuxue[sect_id] = {}
 	

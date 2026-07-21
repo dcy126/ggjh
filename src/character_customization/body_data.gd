@@ -76,7 +76,7 @@ func apply_preset(preset_name: String):
 	if presets.has(preset_name):
 		var preset = presets[preset_name]
 		for key in preset:
-			if has_property(key):
+			if key in self:
 				set(key, preset[key])
 
 func calculate_bmi() -> float:
@@ -104,7 +104,7 @@ func to_dict() -> Dictionary:
 
 func from_dict(data: Dictionary) -> BodyData:
 	for key in data:
-		if has_property(key):
+		if key in self:
 			set(key, data[key])
 	return self
 
