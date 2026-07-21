@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="//battle_scene"]
+
+[ext_resource type="Script" path="res://src/scenes/battle/battle_scene.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/ui/battle/battle_ui.tscn" id="2"]
+
+[node name="BattleScene" type="Node2D"]
+script = ExtResource("1")
+
+[node name="BattleUI" type="Control" parent="."]
+scene_file = ExtResource("2")
+
+[node name="BattleGrid" type="TileMap" parent="."]
+name = "BattleGrid"
+layout_mode = 0
+tile_set = ExtResource("3")
+
+[ext_resource type="TileSet" path="res://src/assets/tilesets/battle_grid.tres" id="3"]

@@ -1,0 +1,15 @@
+Initial commit: 汉家江湖 Godot 4.x project
+
+Core game systems:
+- Combat: turn-based tactical with grid movement, qi/rage/timestamp
+- Characters: 50+ with potential breakthrough, talents
+- Wuxue: 100+ martial arts with effects system
+- Xinfa: heart methods with 6-slot qi value system
+- Equipment: 10 slots, enhance/refine/wanlian/set bonuses
+- Sects: 9 factions with unique mechanics
+- Story: branching choices, world events
+- World: areas, NPCs, exploration
+- PvP: ranked ladder with seasons
+- Guild: buildings, tech, secret realm, war
+- UI: panels for all major systems
+- Character customization: face/body/voice

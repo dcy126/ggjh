@@ -1,0 +1,129 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="汉家江湖"
+config/description="汉家松鼠出品 高自由度武侠RPG"
+run/main_scene="res://src/scenes/main_menu/main_menu.tscn"
+run/main_loop_type=""
+config/features=PackedStringArray("4.5")
+config/icon="res://src/assets/icons/icon.svg"
+config/main_scene="res://src/scenes/main_menu/main_menu.tscn"
+config/credentials=""
+config/fps_display=0
+config/display_scale=1
+config/display_scale_mode=0
+config/dpi_allow_hidpi_scaling=true
+
+[autoload]
+
+GameData="res://src/autoload/game_data.gd"
+CharacterDatabase="res://src/autoload/character_database.gd"
+WuxueDatabase="res://src/autoload/wuxue_database.gd"
+XinfaDatabase="res://src/autoload/xinfa_database.gd"
+EquipmentDatabase="res://src/autoload/equipment_database.gd"
+SectDatabase="res://src/autoload/sect_database.gd"
+StoryDatabase="res://src/autoload/story_database.gd"
+EquipmentSetDatabase="res://src/autoload/equipment_set_database.gd"
+CombatManager="res://src/autoload/combat_manager.gd"
+WorldManager="res://src/autoload/world_manager.gd"
+PlayerData="res://src/autoload/player_data.gd"
+PvPManager="res://src/autoload/pvp_manager.gd"
+GuildManager="res://src/autoload/guild_manager.gd"
+AudioManager="res://src/autoload/audio_manager.gd"
+UIManager="res://src/autoload/ui_manager.gd"
+SaveManager="res://src/autoload/save_manager.gd"
+ConfigManager="res://src/autoload/config_manager.gd"
+TimeManager="res://src/autoload/time_manager.gd"
+EventManager="res://src/autoload/event_manager.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/fullscreen=false
+window/title="汉家江湖"
+window/per_pixel_transparency_allowed=false
+window/per_pixel_transparency_enabled=false
+window/preferred_refresh_rate=60
+window/vsync_mode=1
+rendering/environment/defaults/default_clear_color=Color(0.1, 0.1, 0.12, 1)
+
+[editor]
+
+main_run_args=""
+distributed/enabled=false
+search/filters=["*.gd", "*.tscn", "*.tres", "*.png", "*.jpg", "*.ogg", "*.wav", "*.tres", "*.res"]
+filesystem/metadata/ignore_patterns=["*.import", "*.uid", ".godot/", ".git/", "*.tmp"]
+
+[global_classes]
+
+class="VoiceData"
+path="res://src/character_customization/voice_data.gd"
+
+[input]
+
+devices/pointing/touchscreen/emulate_mouse_from_touch=true
+devices/pointing/touchscreen/emulate_touch_from_mouse=false
+
+[input_map]
+
+move_up=["KeyboardUp", "KeyboardW"]
+move_down=["KeyboardDown", "KeyboardS"]
+move_left=["KeyboardLeft", "KeyboardA"]
+move_right=["KeyboardRight", "KeyboardD"]
+interact=["KeyboardE", "GamepadButton0"]
+attack=["KeyboardSpace", "GamepadButton1"]
+skill_1=["Keyboard1", "GamepadButton2"]
+skill_2=["Keyboard2", "GamepadButton3"]
+skill_3=["Keyboard3", "GamepadButton4"]
+skill_4=["Keyboard4", "GamepadButton5"]
+menu=["KeyboardEscape", "GamepadStart"]
+inventory=["KeyboardI", "GamepadButton6"]
+character=["KeyboardC", "GamepadButton7"]
+pause=["KeyboardP", "GamepadStart"]
+
+[layer_names]
+
+2d_render/layer_1="Background"
+2d_render/layer_2="Ground"
+2d_render/layer_3="Characters"
+2d_render/layer_4="Effects"
+2d_render/layer_5="UI"
+2d_render/layer_6="Overlay"
+2d_physics/layer_1="Player"
+2d_physics/layer_2="Enemy"
+2d_physics/layer_3="NPC"
+2d_physics/layer_4="Obstacle"
+2d_physics/layer_5="Interactable"
+2d_physics/layer_6="Projectile"
+2d_physics/layer_7="Effect"
+2d_physics/layer_8="Trigger"
+
+[physics]
+
+2d/default_gravity=980
+2d/cell_size=2.0
+
+[rendering]
+
+rendering_2d/default_canvas_item_texture_filter=1
+rendering/2d/batching/use_batching=true
+rendering/2d/batching/single_rect_fallback=false
+rendering/2d/batching/max_join_item_commands=25
+rendering/2d/batching/colored_vertex_format_threshold=4.0
+rendering/2d/batching/uv_contract=0.0
+rendering/2d/batching/uv_contract_amount=0.5
+rendering/2d/batching/use_batching_in_editor=false
+
+[resource_filesystem]
+
+import/fbxf_induce_tangents=false
