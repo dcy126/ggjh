@@ -124,6 +124,7 @@ func _create_voice_sliders():
 func _create_slider(prop: Dictionary) -> Control:
 	var container = HBoxContainer.new()
 	container.custom_minimum_size = Vector2(0, 30)
+	container.set_meta("prop_name", prop["name"])
 	
 	var label = Label.new()
 	label.text = prop["label"]
@@ -135,7 +136,6 @@ func _create_slider(prop: Dictionary) -> Control:
 		color_picker.custom_minimum_size = Vector2(100, 30)
 		color_picker.color_changed.connect(_on_color_changed.bind(prop["prop"]))
 		container.add_child(color_picker)
-		container.name = prop["name"]
 		return container
 	
 	var slider = HSlider.new()
@@ -152,7 +152,6 @@ func _create_slider(prop: Dictionary) -> Control:
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	value_label.text = str(slider.value)
 	container.add_child(value_label)
-	container.name = prop["name"]
 	
 	return container
 
@@ -176,8 +175,13 @@ func _on_slider_changed(value: float, prop_name: String):
 	elif current_customization and current_customization.voice_data and current_customization.voice_data.has_property(prop_name):
 		current_customization.voice_data.set(prop_name, value)
 	
-	# 更新数值标签
-	var container = get_node_or_null(prop_name)
+# 更新数值标签（通过我们刚才存的字典 face_sliders / body_sliders / voice_sliders 查找）
+	var container = face_sliders.get(prop_name)
+	if not container:
+		container = body_sliders.get(prop_name)
+	if not container:
+		container = voice_sliders.get(prop_name)
+		
 	if container:
 		var label = container.get_child(-1)
 		if label:

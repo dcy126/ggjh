@@ -4,7 +4,7 @@ extends Control
 @onready var continue_btn = $VBoxContainer/ContinueButton
 @onready var settings_btn = $VBoxContainer/SettingsButton
 @onready var quit_btn = $VBoxContainer/QuitButton
-@onready var logo = $Logo
+@onready var logo = $VBoxContainer/Logo
 @onready var version_label = $VersionLabel
 
 func _ready():

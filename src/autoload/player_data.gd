@@ -109,9 +109,9 @@ func create_new_player(name: String, face_data: FaceData = null, body_data: Body
 	protagonist.potential_level = 1
 	protagonist.potential_exp = 0
 	protagonist.potential_breakthrough = 0
-	protagonist.face_data = face_data or FaceData.new().randomize()
-	protagonist.body_data = body_data or BodyData.new().randomize()
-	protagonist.voice_data = voice_data or VoiceData.new().randomize()
+	protagonist.face_data = face_data if face_data else FaceData.new().randomize()
+	protagonist.body_data = body_data if body_data else  BodyData.new().randomize()
+	protagonist.voice_data = voice_data if voice_data else  VoiceData.new().randomize()
 	
 	companions = [protagonist]
 	formation = [protagonist.id]

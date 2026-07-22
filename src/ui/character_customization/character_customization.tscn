@@ -1,0 +1,101 @@
+[gd_scene load_steps=2 format=3 uid="uid://character_customization_scene"]
+
+[ext_resource type="Script" path="res://src/ui/character_customization/character_customization.gd" id="1_custom_gd"]
+
+[node name="CharacterCustomization" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_custom_gd")
+
+[node name="TopBar" type="HBoxContainer" parent="."]
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 780.0
+offset_bottom = 70.0
+
+[node name="Portrait" type="TextureRect" parent="TopBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 128)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="NameInput" type="LineEdit" parent="TopBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+placeholder_text = "输入角色姓名"
+
+[node name="RandomNameBtn" type="Button" parent="TopBar"]
+unique_name_in_owner = true
+text = "随机名字"
+
+[node name="MainContent" type="HSplitContainer" parent="."]
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 160.0
+offset_right = -20.0
+offset_bottom = -80.0
+
+[node name="FaceTab" type="ScrollContainer" parent="MainContent"]
+custom_minimum_size = Vector2(300, 0)
+size_flags_horizontal = 3
+
+[node name="FaceVBox" type="VBoxContainer" parent="MainContent/FaceTab"]
+unique_name_in_owner = true
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="BodyTab" type="ScrollContainer" parent="MainContent"]
+custom_minimum_size = Vector2(300, 0)
+size_flags_horizontal = 3
+
+[node name="BodyVBox" type="VBoxContainer" parent="MainContent/BodyTab"]
+unique_name_in_owner = true
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="VoiceTab" type="ScrollContainer" parent="MainContent"]
+custom_minimum_size = Vector2(300, 0)
+size_flags_horizontal = 3
+
+[node name="VoiceVBox" type="VBoxContainer" parent="MainContent/VoiceTab"]
+unique_name_in_owner = true
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="PresetPanel" type="ScrollContainer" parent="MainContent"]
+custom_minimum_size = Vector2(200, 0)
+size_flags_horizontal = 1
+
+[node name="PresetButtons" type="GridContainer" parent="MainContent/PresetPanel"]
+unique_name_in_owner = true
+columns = 2
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="BottomBar" type="HBoxContainer" parent="."]
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = -10.0
+
+[node name="BtnRandomize" type="Button" parent="BottomBar"]
+unique_name_in_owner = true
+text = "随机生成"
+
+[node name="BtnConfirm" type="Button" parent="BottomBar"]
+unique_name_in_owner = true
+text = "确认创建"
+
+[node name="BtnCancel" type="Button" parent="BottomBar"]
+unique_name_in_owner = true
+text = "取消"

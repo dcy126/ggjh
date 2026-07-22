@@ -83,6 +83,7 @@ class_name CharacterData
 var face_data: FaceData = null
 var body_data: BodyData = null
 var voice_data: VoiceData = null
+var character_customization: CharacterCustomization = null
 
 ## 战斗相关
 @export var ai_priority: Dictionary = {}

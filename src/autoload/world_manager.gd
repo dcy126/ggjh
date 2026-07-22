@@ -37,12 +37,12 @@ func _create_areas():
 	area.description = "江南繁华都市，西湖美景，武林人士云集"
 	area.type = "主城"
 	area.level_range = Vector2i(1, 20)
-	area.connected_areas = ["hangzhou_outskirts", "west_lake", "suzhou"]
-	area.npcs = ["npc_hangzhou_innkeeper", "npc_hangzhou_blacksmith", "npc_hangzhou_apothecary", "npc_hangzhou_storyteller", "npc_hangzhou_teahouse", "npc_hangzhou_constable", "npc_hangzhou_merchant", "npc_hangzhou_beggar", "npc_hangzhou_guard", "npc_hangzhou_yamen"]
-	area.shops = ["hangzhou_weapon_shop", "hangzhou_armor_shop", "hangzhou_item_shop", "hangzhou_book_shop"]
-	area.features = ["西湖", "断桥", "雷峰塔", "灵隐寺", "苏堤"]
-	area.events = ["event_hangzhou_festival", "event_hangzhou_tournament"]
-	area.secret_locations = ["hangzhou_secret_cave", "hangzhou_underground_market"]
+	area.connected_areas = ["hangzhou_outskirts", "west_lake", "suzhou"] as Array[String]
+	area.npcs = ["npc_hangzhou_innkeeper", "npc_hangzhou_blacksmith", "npc_hangzhou_apothecary", "npc_hangzhou_storyteller", "npc_hangzhou_teahouse", "npc_hangzhou_constable", "npc_hangzhou_merchant", "npc_hangzhou_beggar", "npc_hangzhou_guard", "npc_hangzhou_yamen"] as Array[String]
+	area.shops = ["hangzhou_weapon_shop", "hangzhou_armor_shop", "hangzhou_item_shop", "hangzhou_book_shop"] as Array[String]
+	area.features = ["西湖", "断桥", "雷峰塔", "灵隐寺", "苏堤"] as Array[String]
+	area.events = ["event_hangzhou_festival", "event_hangzhou_tournament"] as Array[String]
+	area.secret_locations = ["hangzhou_secret_cave", "hangzhou_underground_market"] as Array[String]
 	area.background_music = "hangzhou_theme"
 	area.background_image = "hangzhou_bg"
 	
@@ -55,12 +55,12 @@ func _create_areas():
 	area.description = "西湖周边山林，野兽出没，适合新手历练"
 	area.type = "野外"
 	area.level_range = Vector2i(1, 10)
-	area.connected_areas = ["hangzhou", "west_lake", "bamboo_forest"]
-	area.npcs = ["npc_hunter", "npc_herbalist", "npc_wanderer"]
-	area.enemies = ["wolf", "bandit", "wild_boar", "snake"]
-	area.resources = ["herb", "wood", "ore"]
-	area.dungeons = ["wolf_den", "bandit_camp"]
-	area.events = ["event_wild_encounter"]
+	area.connected_areas = ["hangzhou", "west_lake", "bamboo_forest"] as Array[String]
+	area.npcs = ["npc_hunter", "npc_herbalist", "npc_wanderer"] as Array[String]
+	area.enemies = ["wolf", "bandit", "wild_boar", "snake"] as Array[String]
+	area.resources = ["herb", "wood", "ore"] as Array[String]
+	area.dungeons = ["wolf_den", "bandit_camp"] as Array[String]
+	area.events = ["event_wild_encounter"] as Array[String]
 	
 	areas[area.id] = area
 	
@@ -71,11 +71,11 @@ func _create_areas():
 	area.description = "杭州标志性景点，藏有不少江湖秘密"
 	area.type = "景点"
 	area.level_range = Vector2i(5, 15)
-	area.connected_areas = ["hangzhou", "hangzhou_outskirts", "broken_bridge", "leifeng_pagoda"]
-	area.npcs = ["npc_fisherman", "npc_boatman", "npc_poet"]
-	area.features = ["断桥残雪", "苏堤春晓", "三潭印月", "雷峰夕照"]
-	area.secret_locations = ["white_snake_cave", "xu_xian_home"]
-	area.events = ["event_west_lake_poetry", "event_west_lake_moon"]
+	area.connected_areas = ["hangzhou", "hangzhou_outskirts", "broken_bridge", "leifeng_pagoda"] as Array[String]
+	area.npcs = ["npc_fisherman", "npc_boatman", "npc_poet"] as Array[String]
+	area.features = ["断桥残雪", "苏堤春晓", "三潭印月", "雷峰夕照"] as Array[String]
+	area.secret_locations = ["white_snake_cave", "xu_xian_home"] as Array[String]
+	area.events = ["event_west_lake_poetry", "event_west_lake_moon"] as Array[String]
 	
 	areas[area.id] = area
 	
@@ -86,11 +86,11 @@ func _create_areas():
 	area.description = "江南水乡，园林甲天下，暗流涌动"
 	area.type = "主城"
 	area.level_range = Vector2i(15, 30)
-	area.connected_areas = ["hangzhou", "tiger_hill", "hanshan_temple", "tai_lake"]
-	area.npcs = ["npc_suzhou_innkeeper", "npc_suzhou_blacksmith", "npc_suzhou_apothecary", "npc_suzhou_storyteller", "npc_suzhou_garden_owner"]
-	area.shops = ["suzhou_weapon_shop", "suzhou_armor_shop", "suzhou_item_shop", "suzhou_silk_shop"]
-	area.features = ["拙政园", "留园", "虎丘", "寒山寺", "太湖"]
-	area.events = ["event_suzhou_garden_party", "event_suzhou_silk_road"]
+	area.connected_areas = ["hangzhou", "tiger_hill", "hanshan_temple", "tai_lake"] as Array[String]
+	area.npcs = ["npc_suzhou_innkeeper", "npc_suzhou_blacksmith", "npc_suzhou_apothecary", "npc_suzhou_storyteller", "npc_suzhou_garden_owner"] as Array[String]
+	area.shops = ["suzhou_weapon_shop", "suzhou_armor_shop", "suzhou_item_shop", "suzhou_silk_shop"] as Array[String]
+	area.features = ["拙政园", "留园", "虎丘", "寒山寺", "太湖"] as Array[String]
+	area.events = ["event_suzhou_garden_party", "event_suzhou_silk_road"] as Array[String]
 	
 	areas[area.id] = area
 	
@@ -101,11 +101,11 @@ func _create_areas():
 	area.description = "河洛帮总部所在，十三朝古都，帮派势力盘根错节"
 	area.type = "主城"
 	area.level_range = Vector2i(20, 40)
-	area.connected_areas = ["heluo_hq", "longmen_grottoes", "white_horse_temple", "luoyang_outskirts"]
-	area.npcs = ["npc_luoyang_heluo_leader", "npc_luoyang_heluo_elder1", "npc_luoyang_heluo_elder2", "npc_luoyang_heluo_disciple1", "npc_luoyang_heluo_disciple2", "npc_luoyang_innkeeper", "npc_luoyang_blacksmith"]
-	area.shops = ["luoyang_weapon_shop", "luoyang_armor_shop", "luoyang_item_shop", "luoyang_heluo_shop"]
-	area.features = ["龙门石窟", "白马寺", "关林", "洛阳牡丹"]
-	area.events = ["event_heluo_tournament", "event_luoyang_peony"]
+	area.connected_areas = ["heluo_hq", "longmen_grottoes", "white_horse_temple", "luoyang_outskirts"] as Array[String]
+	area.npcs = ["npc_luoyang_heluo_leader", "npc_luoyang_heluo_elder1", "npc_luoyang_heluo_elder2", "npc_luoyang_heluo_disciple1", "npc_luoyang_heluo_disciple2", "npc_luoyang_innkeeper", "npc_luoyang_blacksmith"] as Array[String]
+	area.shops = ["luoyang_weapon_shop", "luoyang_armor_shop", "luoyang_item_shop", "luoyang_heluo_shop"] as Array[String]
+	area.features = ["龙门石窟", "白马寺", "关林", "洛阳牡丹"] as Array[String]
+	area.events = ["event_heluo_tournament", "event_luoyang_peony"] as Array[String]
 	
 	areas[area.id] = area
 	
@@ -116,11 +116,11 @@ func _create_areas():
 	area.description = "皇权中心，天武军驻地，武林盟主府所在"
 	area.type = "主城"
 	area.level_range = Vector2i(30, 50)
-	area.connected_areas = ["imperial_palace", "wulin_alliance", "tianwu_hq", "capital_outskirts"]
-	area.npcs = ["npc_emperor", "npc_wulin_alliance_leader", "npc_tianwu_commander", "npc_capital_innkeeper", "npc_capital_blacksmith", "npc_capital_apothecary"]
-	area.shops = ["capital_weapon_shop", "capital_armor_shop", "capital_item_shop", "capital_royal_shop"]
-	area.features = ["皇宫", "武林盟主府", "天武府", "论剑台", "御花园"]
-	area.events = ["event_lunjian_season", "event_wulin_conference", "event_imperial_exam"]
+	area.connected_areas = ["imperial_palace", "wulin_alliance", "tianwu_hq", "capital_outskirts"] as Array[String]
+	area.npcs = ["npc_emperor", "npc_wulin_alliance_leader", "npc_tianwu_commander", "npc_capital_innkeeper", "npc_capital_blacksmith", "npc_capital_apothecary"] as Array[String]
+	area.shops = ["capital_weapon_shop", "capital_armor_shop", "capital_item_shop", "capital_royal_shop"] as Array[String]
+	area.features = ["皇宫", "武林盟主府", "天武府", "论剑台", "御花园"] as Array[String]
+	area.events = ["event_lunjian_season", "event_wulin_conference", "event_imperial_exam"] as Array[String]
 	
 	areas[area.id] = area
 	
@@ -132,14 +132,14 @@ func _create_areas():
 		area.description = sect.background_story
 		area.type = "门派"
 		area.level_range = Vector2i(10, 60)
-		area.connected_areas = ["capital"] if sect.id == "tianwu" else ["luoyang"] if sect.id == "heluo" else ["hangzhou"]
-		area.npcs = ["npc_sect_%s_leader" % sect.id, "npc_sect_%s_elder_0" % sect.id, "npc_sect_%s_elder_1" % sect.id, "npc_sect_%s_elder_2" % sect.id]
+		area.connected_areas.assign(["capital"] if sect.id == "tianwu" else ["luoyang"] if sect.id == "heluo" else ["hangzhou"])
+		area.npcs = ["npc_sect_%s_leader" % sect.id, "npc_sect_%s_elder_0" % sect.id, "npc_sect_%s_elder_1" % sect.id, "npc_sect_%s_elder_2" % sect.id] as Array[String]
 		for i in range(5):
 			area.npcs.append("npc_sect_%s_disciple_%d" % [sect.id, i])
-		area.shops = ["sect_%s_shop" % sect.id]
-		area.features = ["练功房", "藏经阁", "议事厅", "后山试剑台"]
-		area.events = ["event_sect_%s_tournament" % sect.id]
-		area.secret_locations = ["sect_%s_forbidden" % sect.id]
+		area.shops = ["sect_%s_shop" % sect.id] as Array[String]
+		area.features = ["练功房", "藏经阁", "议事厅", "后山试剑台"] as Array[String]
+		area.events = ["event_sect_%s_tournament" % sect.id] as Array[String]
+		area.secret_locations = ["sect_%s_forbidden" % sect.id] as Array[String]
 		
 		areas[area.id] = area
 	
@@ -174,13 +174,13 @@ func _create_areas():
 		area.description = a["desc"]
 		area.type = "野外"
 		area.level_range = a["level"]
-		area.connected_areas = a["connected"]
+		area.connected_areas.assign(a["connected"])
 		if a.has("enemies"):
-			area.enemies = a["enemies"]
+			area.enemies.assign( a["enemies"])
 		if a.has("resources"):
-			area.resources = a["resources"]
+			area.resources.assign(a["resources"])
 		if a.has("features"):
-			area.features = a["features"]
+			area.features.assign(a["features"])
 		areas[area.id] = area
 	
 	# 特殊地图：副本/秘境
@@ -206,7 +206,7 @@ func _create_areas():
 		area.name = a["name"]
 		area.type = a["type"]
 		area.level_range = a["level"]
-		area.connected_areas = [a["parent"]]
+		area.connected_areas.assign([a["parent"]])
 		area.boss = a.get("boss", "")
 		area.rewards = a.get("rewards", [])
 		area.schedule = a.get("schedule", "")

@@ -83,7 +83,7 @@ func _create_quanzhang_wuxue():
 	w.damage_scaling = {"atk": 1.2}
 	w.description = "以内功护体，硬抗敌人攻击并反击"
 	w.effects.append(_create_effect("护盾", "受击", 0.3, {"value": 50, "duration": 1}))
-	w.tags = ["防御", "反击"]
+	w.tags = ["防御", "反击"] as Array[String]
 	
 	# 降龙十八掌 - 金色外功全体
 	w = _create_base_wuxue("xianglong_shiba", "降龙十八掌", "拳掌", "金", "外功", "全体", 1, 3, 30, 20, 0, 3, 0)
@@ -93,7 +93,7 @@ func _create_quanzhang_wuxue():
 	w.description = "天下至刚至阳的掌法，威力惊人"
 	w.effects.append(_create_effect("击退", "命中", 1.0, {"distance": 2}))
 	w.effects.append(_create_effect("眩晕", "命中", 0.2, {"duration": 1}))
-	w.tags = ["大招", "击退", "控制"]
+	w.tags = ["大招", "击退", "控制"] as Array[String]
 	
 	# 太极拳 - 紫色内功单体
 	w = _create_base_wuxue("taiji_quan", "太极拳", "拳掌", "紫", "内功", "单体", 1, 1, 15, 0, 0, 1, 0)
@@ -102,7 +102,7 @@ func _create_quanzhang_wuxue():
 	w.description = "以柔克刚，四两拨千斤"
 	w.effects.append(_create_effect("反击", "受击", 0.5, {"chance": 0.8, "duration": 2}))
 	w.effects.append(_create_effect("化劲", "常驻", 1.0, {"damage_reduction": 0.15}))
-	w.tags = ["反击", "减伤", "内功"]
+	w.tags = ["反击", "减伤", "内功"] as Array[String]
 	
 	# 野蛮冲撞 - 绿色外功单体位移
 	w = _create_base_wuxue("yeman_chongzhuang", "野蛮冲撞", "拳掌", "绿", "外功", "单体", 1, 2, 5, 0, 0, 0, 0)
@@ -111,7 +111,7 @@ func _create_quanzhang_wuxue():
 	w.description = "蛮力冲撞，击退敌人"
 	w.effects.append(_create_effect("击退", "命中", 1.0, {"distance": 3}))
 	w.effects.append(_create_effect("位移", "施放前", 1.0, {"direction": "向目标", "distance": 3}))
-	w.tags = ["位移", "击退"]
+	w.tags = ["位移", "击退"] as Array[String]
 	
 	# 百步神拳 - 蓝色外功竖排
 	w = _create_base_wuxue("baibu_shenquan", "百步神拳", "拳掌", "蓝", "外功", "竖排", 1, 3, 10, 0, 0, 2, 0)
@@ -119,7 +119,7 @@ func _create_quanzhang_wuxue():
 	w.damage_scaling = {"atk": 1.3}
 	w.description = "拳风如箭，穿透直线上的敌人"
 	w.effects.append(_create_effect("内伤", "命中", 0.3, {"value": 20, "duration": 3}))
-	w.tags = ["穿透", "内伤"]
+	w.tags = ["穿透", "内伤"] as Array[String]
 	
 	# 如来神掌 - 红色外功全体
 	w = _create_base_wuxue("rulai_shenzhang", "如来神掌", "拳掌", "红", "外功", "全体", 1, 4, 50, 30, 0, 5, 0)
@@ -129,7 +129,7 @@ func _create_quanzhang_wuxue():
 	w.description = "佛门绝学，掌心佛国，普度众生"
 	w.effects.append(_create_effect("封印", "命中", 0.4, {"duration": 2}))
 	w.effects.append(_create_effect("禁疗", "命中", 0.3, {"duration": 3}))
-	w.tags = ["大招", "封印", "禁疗"]
+	w.tags = ["大招", "封印", "禁疗"] as Array[String]
 
 func _create_zhifa_wuxue():
 	# 一阳指 - 白色内功单体
@@ -138,7 +138,7 @@ func _create_zhifa_wuxue():
 	w.damage_scaling = {"atk": 0.8, "spd": 0.5}
 	w.description = "指力贯穿，点穴封血"
 	w.effects.append(_create_effect("封印", "命中", 0.15, {"duration": 1}))
-	w.tags = ["封印", "点穴"]
+	w.tags = ["封印", "点穴"] as Array[String]
 	
 	# 六脉神剑 - 金色内功横排
 	w = _create_base_wuxue("liu_mai_shen_jian", "六脉神剑", "指法", "金", "内功", "横排", 1, 3, 25, 15, 0, 3, 0)
@@ -147,7 +147,7 @@ func _create_zhifa_wuxue():
 	w.description = "六脉剑气纵横，无坚不摧"
 	w.effects.append(_create_effect("剑气", "命中", 1.0, {"damage_bonus": 0.3, "duration": 2}))
 	w.effects.append(_create_effect("流血", "命中", 0.4, {"damage": 30, "duration": 3}))
-	w.tags = ["剑气", "流血", "大招"]
+	w.tags = ["剑气", "流血", "大招"] as Array[String]
 	
 	# 弹指神通 - 紫色内功单体
 	w = _create_base_wuxue("tanzhi_shentong", "弹指神通", "指法", "紫", "内功", "单体", 1, 2, 15, 5, 0, 2, 0)
@@ -156,7 +156,7 @@ func _create_zhifa_wuxue():
 	w.description = "弹指间灰飞烟灭"
 	w.effects.append(_create_effect("沉默", "命中", 0.3, {"duration": 2}))
 	w.effects.append(_create_effect("推条", "命中", 1.0, {"value": 30}))
-	w.tags = ["沉默", "推条"]
+	w.tags = ["沉默", "推条"] as Array[String]
 	
 	# 兰花拂穴手 - 蓝色内功单体
 	w = _create_base_wuxue("lanhua_fuxue", "兰花拂穴手", "指法", "蓝", "内功", "单体", 1, 1, 10, 0, 0, 1, 0)
@@ -165,7 +165,7 @@ func _create_zhifa_wuxue():
 	w.description = "手法轻柔如兰花，暗藏杀机"
 	w.effects.append(_create_effect("定身", "命中", 0.25, {"duration": 1}))
 	w.effects.append(_create_effect("减速", "命中", 0.5, {"value": 0.3, "duration": 2}))
-	w.tags = ["定身", "减速"]
+	w.tags = ["定身", "减速"] as Array[String]
 
 func _create_tuifa_wuxue():
 	# 腿法 - 基础
@@ -173,7 +173,7 @@ func _create_tuifa_wuxue():
 	w.base_damage = 70
 	w.damage_scaling = {"atk": 1.1, "spd": 0.3}
 	w.description = "基础腿法，快速连踢"
-	w.tags = ["连击"]
+	w.tags = ["连击"] as Array[String]
 	
 	# 狮吼功 - 绿色内功十字
 	w = _create_base_wuxue("shihou_gong", "狮吼功", "腿法", "绿", "内功", "十字", 1, 2, 10, 0, 0, 2, 0)
@@ -182,7 +182,7 @@ func _create_tuifa_wuxue():
 	w.description = "佛门狮吼，声震四方"
 	w.effects.append(_create_effect("眩晕", "命中", 0.3, {"duration": 1}))
 	w.effects.append(_create_effect("推条", "命中", 1.0, {"value": 20}))
-	w.tags = ["眩晕", "范围"]
+	w.tags = ["眩晕", "范围"] as Array[String]
 	
 	# 乾坤大挪移 - 金色内功单体位移
 	w = _create_base_wuxue("qiankun_danyi", "乾坤大挪移", "腿法", "金", "内功", "单体", 1, 1, 30, 20, 0, 3, 0)
@@ -193,7 +193,7 @@ func _create_tuifa_wuxue():
 	w.effects.append(_create_effect("位移", "施放前", 1.0, {"direction": "远离最近敌人", "distance": 4}))
 	w.effects.append(_create_effect("无敌", "施放前", 1.0, {"duration": 1}))
 	w.effects.append(_create_effect("反击", "受击", 1.0, {"chance": 1.0, "damage_multiplier": 2.0}))
-	w.tags = ["位移", "无敌", "反击", "大招"]
+	w.tags = ["位移", "无敌", "反击", "大招"] as Array[String]
 	
 	# 龙腿 - 红色外功菱形
 	w = _create_base_wuxue("long_tui", "龙腿", "腿法", "红", "外功", "菱形", 1, 2, 40, 25, 0, 4, 0)
@@ -203,7 +203,7 @@ func _create_tuifa_wuxue():
 	w.description = "龙行天下，腿影重重"
 	w.effects.append(_create_effect("龙拳", "命中", 1.0, {"combo_count": 3, "damage_per_hit": 0.4}))
 	w.effects.append(_create_effect("击退", "命中", 1.0, {"distance": 2}))
-	w.tags = ["连击", "击退", "龙拳", "大招"]
+	w.tags = ["连击", "击退", "龙拳", "大招"] as Array[String]
 
 func _create_jianfa_wuxue():
 	# 基础剑法
@@ -212,7 +212,7 @@ func _create_jianfa_wuxue():
 	w.damage_scaling = {"atk": 1.2}
 	w.requires_weapon = "剑"
 	w.description = "剑法入门，直刺横扫"
-	w.tags = ["剑", "基础"]
+	w.tags = ["剑", "基础"] as Array[String]
 	
 	# 独孤九剑 - 金色外功单体
 	w = _create_base_wuxue("dugu_jiujian", "独孤九剑", "剑法", "金", "外功", "单体", 1, 1, 25, 10, 0, 2, 0)
@@ -224,7 +224,7 @@ func _create_jianfa_wuxue():
 	w.effects.append(_create_effect("破防", "命中", 1.0, {"value": 0.5, "duration": 2}))
 	w.effects.append(_create_effect("连击", "命中", 0.5, {"count": 3}))
 	w.effects.append(_create_effect("追击", "击杀", 1.0, {"chance": 1.0}))
-	w.tags = ["破招", "连击", "追击", "剑"]
+	w.tags = ["破招", "连击", "追击", "剑"] as Array[String]
 	
 	# 太极剑 - 紫色内功横排
 	w = _create_base_wuxue("taiji_jian", "太极剑", "剑法", "紫", "内功", "横排", 1, 3, 20, 0, 0, 3, 0)
@@ -234,7 +234,7 @@ func _create_jianfa_wuxue():
 	w.description = "剑意阴阳，绵绵不绝"
 	w.effects.append(_create_effect("阴阳", "常驻", 1.0, {"damage_bonus": 0.2, "heal_on_hit": 0.1}))
 	w.effects.append(_create_effect("护盾", "回合开始", 1.0, {"value": 100, "duration": 1}))
-	w.tags = ["阴阳", "护盾", "吸血", "剑"]
+	w.tags = ["阴阳", "护盾", "吸血", "剑"] as Array[String]
 	
 	# 玉女素心剑 - 红色外功全体
 	w = _create_base_wuxue("yunu_suxin_jian", "玉女素心剑", "剑法", "红", "外功", "全体", 1, 4, 40, 20, 0, 4, 0)
@@ -245,7 +245,7 @@ func _create_jianfa_wuxue():
 	w.description = "玉女心经与素心剑合二为一"
 	w.effects.append(_create_effect("清除增益", "命中", 1.0, {"count": 3}))
 	w.effects.append(_create_effect("幻影", "施放后", 1.0, {"duration": 2, "dodge_bonus": 0.5}))
-	w.tags = ["清除增益", "幻影", "大招", "剑"]
+	w.tags = ["清除增益", "幻影", "大招", "剑"] as Array[String]
 	
 	# 华山剑法 - 蓝色外功竖排
 	w = _create_base_wuxue("huashan_jianfa", "华山剑法", "剑法", "蓝", "外功", "竖排", 1, 3, 15, 5, 0, 2, 0)
@@ -254,7 +254,7 @@ func _create_jianfa_wuxue():
 	w.requires_weapon = "剑"
 	w.description = "华山一派剑法，气势磅礴"
 	w.effects.append(_create_effect("剑气", "命中", 0.5, {"damage_bonus": 0.3, "duration": 2}))
-	w.tags = ["剑气", "剑"]
+	w.tags = ["剑气", "剑"] as Array[String]
 
 func _create_daofa_wuxue():
 	# 基础刀法
@@ -263,7 +263,7 @@ func _create_daofa_wuxue():
 	w.damage_scaling = {"atk": 1.3}
 	w.requires_weapon = "刀"
 	w.description = "刀法入门，劈砍挑刺"
-	w.tags = ["刀", "基础"]
+	w.tags = ["刀", "基础"] as Array[String]
 	
 	# 魔刀·血饮 - 金色外功单体吸血
 	w = _create_base_wuxue("modao_xueyin", "魔刀·血饮", "刀法", "金", "外功", "单体", 1, 1, 20, 15, 0, 3, 0)
@@ -274,7 +274,7 @@ func _create_daofa_wuxue():
 	w.effects.append(_create_effect("吸血", "命中", 1.0, {"rate": 0.5}))
 	w.effects.append(_create_effect("狂战", "击杀", 1.0, {"atk_bonus": 0.2, "max_stacks": 5}))
 	w.effects.append(_create_effect("魔刀", "施放后", 1.0, {"duration": 3, "form": "魔刀"}))
-	w.tags = ["吸血", "狂战", "魔刀", "变身", "刀"]
+	w.tags = ["吸血", "狂战", "魔刀", "变身", "刀"] as Array[String]
 	
 	# 佛刀·舍身 - 紫色外功横排格挡
 	w = _create_base_wuxue("fodao_shehen", "佛刀·舍身", "刀法", "紫", "外功", "横排", 1, 3, 20, 10, 0, 2, 0)
@@ -285,7 +285,7 @@ func _create_daofa_wuxue():
 	w.effects.append(_create_effect("格挡", "常驻", 1.0, {"chance": 0.4, "reduction": 0.5}))
 	w.effects.append(_create_effect("援护", "友方受击", 0.5, {"range": 2, "damage_share": 0.3}))
 	w.effects.append(_create_effect("佛刀", "施放后", 1.0, {"duration": 3, "form": "佛刀"}))
-	w.tags = ["格挡", "援护", "佛刀", "变身", "刀"]
+	w.tags = ["格挡", "援护", "佛刀", "变身", "刀"] as Array[String]
 	
 	# 刀魔·斩业 - 红色外功全体
 	w = _create_base_wuxue("daomo_zhanye", "刀魔·斩业", "刀法", "红", "外功", "全体", 1, 4, 50, 30, 0, 5, 0)
@@ -297,7 +297,7 @@ func _create_daofa_wuxue():
 	w.effects.append(_create_effect("破盾", "命中", 1.0, {"ignore_shield": true}))
 	w.effects.append(_create_effect("重伤", "命中", 0.5, {"heal_reduction": 1.0, "duration": 3}))
 	w.effects.append(_create_effect("斩杀", "击杀", 1.0, {"rage_gain": 50}))
-	w.tags = ["破盾", "重伤", "斩杀", "大招", "刀"]
+	w.tags = ["破盾", "重伤", "斩杀", "大招", "刀"] as Array[String]
 
 func _create_qiangfa_wuxue():
 	# 基础枪法
@@ -306,7 +306,7 @@ func _create_qiangfa_wuxue():
 	w.damage_scaling = {"atk": 1.2, "spd": 0.4}
 	w.requires_weapon = "枪"
 	w.description = "枪如游龙，攻守兼备"
-	w.tags = ["枪", "基础"]
+	w.tags = ["枪", "基础"] as Array[String]
 	
 	# 百鸟朝凤枪 - 蓝色外功竖排
 	w = _create_base_wuxue("bainiao_chaofeng", "百鸟朝凤枪", "枪法", "蓝", "外功", "竖排", 1, 3, 15, 5, 0, 2, 0)
@@ -316,7 +316,7 @@ func _create_qiangfa_wuxue():
 	w.description = "枪尖如百鸟朝凤，变幻莫测"
 	w.effects.append(_create_effect("穿透", "命中", 1.0, {"ignore_def": 0.3}))
 	w.effects.append(_create_effect("连击", "命中", 0.4, {"count": 2}))
-	w.tags = ["穿透", "连击", "枪"]
+	w.tags = ["穿透", "连击", "枪"] as Array[String]
 	
 	# 火神枪 - 金色外功十字
 	w = _create_base_wuxue("huoshen_qiang", "火神枪", "枪法", "金", "外功", "十字", 1, 2, 30, 20, 0, 3, 0)
@@ -327,7 +327,7 @@ func _create_qiangfa_wuxue():
 	w.effects.append(_create_effect("燃烧", "命中", 0.6, {"damage": 50, "duration": 3}))
 	w.effects.append(_create_effect("击退", "命中", 1.0, {"distance": 2}))
 	w.effects.append(_create_effect("灼热", "时序", 1.0, {"timestamps": [100, 200, 300], "damage": 30}))
-	w.tags = ["燃烧", "击退", "时序", "枪"]
+	w.tags = ["燃烧", "击退", "时序", "枪"] as Array[String]
 	
 	# 破军枪 - 红色外功单体
 	w = _create_base_wuxue("pojun_qiang", "破军枪", "枪法", "红", "外功", "单体", 1, 1, 40, 25, 0, 4, 0)
@@ -339,7 +339,7 @@ func _create_qiangfa_wuxue():
 	w.effects.append(_create_effect("破甲", "命中", 1.0, {"def_reduction": 0.8, "duration": 3}))
 	w.effects.append(_create_effect("真实伤害", "命中", 1.0, {"value": 200}))
 	w.effects.append(_create_effect("霸体", "施放前", 1.0, {"duration": 1}))
-	w.tags = ["破甲", "真伤", "霸体", "大招", "枪"]
+	w.tags = ["破甲", "真伤", "霸体", "大招", "枪"] as Array[String]
 
 func _create_gunfa_wuxue():
 	# 基础棍法
@@ -348,7 +348,7 @@ func _create_gunfa_wuxue():
 	w.damage_scaling = {"atk": 1.2, "def": 0.3}
 	w.requires_weapon = "棍"
 	w.description = "棍打一片，防守反击"
-	w.tags = ["棍", "基础"]
+	w.tags = ["棍", "基础"] as Array[String]
 	
 	# 降魔杖法 - 绿色外功十字
 	w = _create_base_wuxue("xiangmo_zhangfa", "降魔杖法", "棍法", "绿", "外功", "十字", 1, 2, 10, 0, 0, 2, 0)
@@ -358,7 +358,7 @@ func _create_gunfa_wuxue():
 	w.description = "佛门降魔，正气凛然"
 	w.effects.append(_create_effect("眩晕", "命中", 0.3, {"duration": 1}))
 	w.effects.append(_create_effect("净化", "命中", 1.0, {"remove_debuffs": 1}))
-	w.tags = ["眩晕", "净化", "棍"]
+	w.tags = ["眩晕", "净化", "棍"] as Array[String]
 	
 	# 打狗棒法 - 金色外功菱形
 	w = _create_base_wuxue("dagou_bangfa", "打狗棒法", "棍法", "金", "外功", "菱形", 1, 2, 25, 15, 0, 3, 0)
@@ -369,7 +369,7 @@ func _create_gunfa_wuxue():
 	w.effects.append(_create_effect("缴械", "命中", 0.3, {"duration": 2}))
 	w.effects.append(_create_effect("偷怒气", "命中", 0.5, {"value": 10}))
 	w.effects.append(_create_effect("协同", "队友行动", 0.3, {"ally_action": "attack"}))
-	w.tags = ["缴械", "偷怒气", "协同", "棍"]
+	w.tags = ["缴械", "偷怒气", "协同", "棍"] as Array[String]
 	
 	# 混元一气棍 - 红色外功全体
 	w = _create_base_wuxue("hunyuan_yiqi_gun", "混元一气棍", "棍法", "红", "外功", "全体", 1, 3, 45, 25, 0, 4, 0)
@@ -380,7 +380,7 @@ func _create_gunfa_wuxue():
 	w.description = "混元一气，万法归一"
 	w.effects.append(_create_effect("护盾", "施放前", 1.0, {"value": 500, "duration": 2, "team": true}))
 	w.effects.append(_create_effect("混元", "命中", 1.0, {"damage_types": ["外功", "内功", "真实"]}))
-	w.tags = ["护盾", "混元", "大招", "棍"]
+	w.tags = ["护盾", "混元", "大招", "棍"] as Array[String]
 
 func _create_bianfa_wuxue():
 	# 基础鞭法
@@ -389,7 +389,7 @@ func _create_bianfa_wuxue():
 	w.damage_scaling = {"atk": 1.1, "spd": 0.6}
 	w.requires_weapon = "鞭"
 	w.description = "鞭长莫及，柔中带刚"
-	w.tags = ["鞭", "基础"]
+	w.tags = ["鞭", "基础"] as Array[String]
 	
 	# 灵蛇鞭法 - 蓝色外功横排
 	w = _create_base_wuxue("lingshe_bianfa", "灵蛇鞭法", "鞭法", "蓝", "外功", "横排", 1, 3, 15, 5, 0, 2, 0)
@@ -399,7 +399,7 @@ func _create_bianfa_wuxue():
 	w.description = "鞭影如灵蛇，难以捉摸"
 	w.effects.append(_create_effect("中毒", "命中", 0.5, {"damage": 25, "duration": 3}))
 	w.effects.append(_create_effect("拉近", "命中", 0.3, {"distance": 2}))
-	w.tags = ["中毒", "拉近", "鞭"]
+	w.tags = ["中毒", "拉近", "鞭"] as Array[String]
 
 func _create_anqi_wuxue():
 	# 基础暗器
@@ -408,7 +408,7 @@ func _create_anqi_wuxue():
 	w.damage_scaling = {"atk": 0.8, "spd": 1.0}
 	w.requires_weapon = "暗器"
 	w.description = "暗器手法，出其不意"
-	w.tags = ["暗器", "基础"]
+	w.tags = ["暗器", "基础"] as Array[String]
 	
 	# 雨花针 - 金色外功全体
 	w = _create_base_wuxue("yuhua_zhen", "雨花针", "暗器", "金", "外功", "全体", 1, 3, 25, 15, 0, 3, 0)
@@ -419,7 +419,7 @@ func _create_anqi_wuxue():
 	w.effects.append(_create_effect("中毒", "命中", 0.8, {"damage": 15, "duration": 3}))
 	w.effects.append(_create_effect("流血", "命中", 0.4, {"damage": 20, "duration": 2}))
 	w.effects.append(_create_effect("随机", "额外", 0.3, {"target_count": 2}))
-	w.tags = ["中毒", "流血", "随机", "暗器"]
+	w.tags = ["中毒", "流血", "随机", "暗器"] as Array[String]
 	
 	# 满天花雨 - 红色外功菱形
 	w = _create_base_wuxue("mantian_huayu", "满天花雨", "暗器", "红", "外功", "菱形", 2, 3, 40, 20, 0, 4, 0)
@@ -430,7 +430,7 @@ func _create_anqi_wuxue():
 	w.description = "漫天花雨，无孔不入"
 	w.effects.append(_create_effect("暴雨", "时序", 1.0, {"timestamps": [50, 100, 150, 200, 250], "damage": 80}))
 	w.effects.append(_create_effect("百毒", "命中", 0.6, {"poison_damage": 30, "duration": 5}))
-	w.tags = ["时序", "百毒", "大招", "暗器"]
+	w.tags = ["时序", "百毒", "大招", "暗器"] as Array[String]
 
 func _create_qinyin_wuxue():
 	# 基础琴音
@@ -439,7 +439,7 @@ func _create_qinyin_wuxue():
 	w.heal_scaling = {"atk": 0.5}
 	w.requires_weapon = "琴"
 	w.description = "琴音悠扬，抚慰人心"
-	w.tags = ["治疗", "琴"]
+	w.tags = ["治疗", "琴"] as Array[String]
 	
 	# 高山流水 - 紫色内功友方全体
 	w = _create_base_wuxue("gaoshan_liushui", "高山流水", "琴音", "紫", "内功", "友方全体", 1, 1, 30, 0, 0, 3, 0)
@@ -450,7 +450,7 @@ func _create_qinyin_wuxue():
 	w.effects.append(_create_effect("加怒气", "治疗", 1.0, {"value": 10}))
 	w.effects.append(_create_effect("清除减益", "治疗", 1.0, {"count": 2}))
 	w.effects.append(_create_effect("护盾", "治疗", 1.0, {"value": 150, "duration": 2}))
-	w.tags = ["治疗", "加怒", "净化", "护盾", "琴"]
+	w.tags = ["治疗", "加怒", "净化", "护盾", "琴"] as Array[String]
 	
 	# 广陵散 - 金色内功友方全体
 	w = _create_base_wuxue("guangling_san", "广陵散", "琴音", "金", "内功", "友方全体", 1, 1, 40, 0, 15, 4, 0)
@@ -462,7 +462,7 @@ func _create_qinyin_wuxue():
 	w.effects.append(_create_effect("复活", "治疗", 0.2, {"hp_percent": 0.5}))
 	w.effects.append(_create_effect("无敌", "治疗", 1.0, {"duration": 1}))
 	w.effects.append(_create_effect("全属性", "常驻", 1.0, {"all_stats": 0.2, "duration": 3}))
-	w.tags = ["复活", "无敌", "全属性", "大招", "琴"]
+	w.tags = ["复活", "无敌", "全属性", "大招", "琴"] as Array[String]
 	
 	# 十面埋伏 - 红色内功敌方全体
 	w = _create_base_wuxue("shimian_maifu", "十面埋伏", "琴音", "红", "内功", "敌方全体", 1, 1, 50, 30, 0, 5, 0)
@@ -474,7 +474,7 @@ func _create_qinyin_wuxue():
 	w.effects.append(_create_effect("恐惧", "命中", 0.5, {"duration": 2}))
 	w.effects.append(_create_effect("混乱", "命中", 0.3, {"duration": 2}))
 	w.effects.append(_create_effect("禁音", "命中", 1.0, {"duration": 3}))
-	w.tags = ["恐惧", "混乱", "禁音", "大招", "琴"]
+	w.tags = ["恐惧", "混乱", "禁音", "大招", "琴"] as Array[String]
 
 func _create_yishu_wuxue():
 	# 基础医术
@@ -482,7 +482,7 @@ func _create_yishu_wuxue():
 	w.base_heal = 80
 	w.heal_scaling = {"atk": 0.6}
 	w.description = "悬壶济世，妙手回春"
-	w.tags = ["治疗", "医术"]
+	w.tags = ["治疗", "医术"] as Array[String]
 	
 	# 回春术 - 蓝色内功友方单体
 	w = _create_base_wuxue("huichun_shu", "回春术", "医术", "蓝", "内功", "友方单体", 1, 1, 15, 0, 0, 2, 0)
@@ -491,7 +491,7 @@ func _create_yishu_wuxue():
 	w.description = "起死回生，春回大地"
 	w.effects.append(_create_effect("清除减益", "治疗", 1.0, {"count": 3}))
 	w.effects.append(_create_effect("护盾", "治疗", 1.0, {"value": 200, "duration": 2}))
-	w.tags = ["治疗", "净化", "护盾", "医术"]
+	w.tags = ["治疗", "净化", "护盾", "医术"] as Array[String]
 	
 	# 九转还魂丹 - 金色内功友方单体
 	w = _create_base_wuxue("jiuzhuan_huanhun", "九转还魂丹", "医术", "金", "内功", "友方单体", 1, 1, 50, 0, 20, 5, 0)
@@ -501,7 +501,7 @@ func _create_yishu_wuxue():
 	w.description = "九转丹成，可救死人"
 	w.effects.append(_create_effect("复活", "治疗", 1.0, {"hp_percent": 0.8}))
 	w.effects.append(_create_effect("满状态", "复活", 1.0, {"clear_all_debuffs": true, "full_mp": true, "rage": 100}))
-	w.tags = ["复活", "满状态", "大招", "医术"]
+	w.tags = ["复活", "满状态", "大招", "医术"] as Array[String]
 	
 	# 悬壶济世 - 紫色内功友方全体
 	w = _create_base_wuxue("xuanhu_jishi", "悬壶济世", "医术", "紫", "内功", "友方全体", 1, 1, 35, 0, 0, 3, 0)
@@ -510,7 +510,7 @@ func _create_yishu_wuxue():
 	w.description = "大医精诚，普济众生"
 	w.effects.append(_create_effect("持续治疗", "治疗", 1.0, {"heal_per_turn": 100, "duration": 3}))
 	w.effects.append(_create_effect("免疫减益", "治疗", 1.0, {"duration": 2}))
-	w.tags = ["持续治疗", "免疫减益", "医术"]
+	w.tags = ["持续治疗", "免疫减益", "医术"] as Array[String]
 
 func _create_dushu_wuxue():
 	# 基础毒术
@@ -519,7 +519,7 @@ func _create_dushu_wuxue():
 	w.damage_scaling = {"atk": 0.5, "spd": 0.5}
 	w.description = "毒药入门，细水长流"
 	w.effects.append(_create_effect("中毒", "命中", 1.0, {"damage": 15, "duration": 3}))
-	w.tags = ["中毒", "毒术"]
+	w.tags = ["中毒", "毒术"] as Array[String]
 	
 	# 五毒教秘毒 - 紫色内功十字
 	w = _create_base_wuxue("wudu_midu", "五毒教秘毒", "毒术", "紫", "内功", "十字", 1, 2, 20, 10, 0, 2, 0)
@@ -528,7 +528,7 @@ func _create_dushu_wuxue():
 	w.description = "五毒俱全，中者必亡"
 	w.effects.append(_create_effect("剧毒", "命中", 1.0, {"damage": 40, "duration": 4, "spread": true}))
 	w.effects.append(_create_effect("腐蚀", "命中", 0.5, {"def_reduction": 0.2, "duration": 3}))
-	w.tags = ["剧毒", "腐蚀", "传播", "毒术"]
+	w.tags = ["剧毒", "腐蚀", "传播", "毒术"] as Array[String]
 	
 	# 蚀骨穿心散 - 红色内功单体
 	w = _create_base_wuxue("shigu_chuanxin", "蚀骨穿心散", "毒术", "红", "内功", "单体", 1, 1, 40, 20, 0, 4, 0)
@@ -539,7 +539,7 @@ func _create_dushu_wuxue():
 	w.effects.append(_create_effect("蚀骨", "命中", 1.0, {"damage_per_turn": 100, "duration": 5, "ignore_def": true}))
 	w.effects.append(_create_effect("穿心", "命中", 1.0, {"true_damage": 200, "heal_ban": 3}))
 	w.effects.append(_create_effect("传染", "死亡", 1.0, {"radius": 2, "damage": 200}))
-	w.tags = ["蚀骨", "穿心", "传染", "禁疗", "大招", "毒术"]
+	w.tags = ["蚀骨", "穿心", "传染", "禁疗", "大招", "毒术"] as Array[String]
 
 func _create_jiguan_wuxue():
 	# 基础机关
@@ -547,7 +547,7 @@ func _create_jiguan_wuxue():
 	w.base_damage = 70
 	w.damage_scaling = {"atk": 1.0, "spd": 0.5}
 	w.description = "机关术入门，巧制木鸟"
-	w.tags = ["机关", "基础"]
+	w.tags = ["机关", "基础"] as Array[String]
 	
 	# 木牛流马 - 蓝色外功召唤
 	w = _create_base_wuxue("muniu_liuma", "木牛流马", "机关", "蓝", "外功", "自身", 1, 1, 20, 0, 0, 3, 0)
@@ -555,7 +555,7 @@ func _create_jiguan_wuxue():
 	w.description = "制造机关兽协助战斗"
 	w.effects.append(_create_effect("召唤", "施放", 1.0, {"summon_id": "muniu", "count": 1, "duration": 5}))
 	w.effects.append(_create_effect("召唤", "施放", 1.0, {"summon_id": "liuma", "count": 1, "duration": 5}))
-	w.tags = ["召唤", "机关兽", "机关"]
+	w.tags = ["召唤", "机关兽", "机关"] as Array[String]
 	
 	# 诸葛连弩 - 金色外功全体
 	w = _create_base_wuxue("zhuge_liannu", "诸葛连弩", "机关", "金", "外功", "全体", 1, 3, 30, 15, 0, 3, 0)
@@ -564,7 +564,7 @@ func _create_jiguan_wuxue():
 	w.description = "连弩齐发，箭雨如林"
 	w.effects.append(_create_effect("连射", "命中", 1.0, {"hit_count": 5, "damage_per_hit": 0.3}))
 	w.effects.append(_create_effect("破甲", "命中", 0.5, {"def_reduction": 0.3, "duration": 2}))
-	w.tags = ["连射", "破甲", "机关"]
+	w.tags = ["连射", "破甲", "机关"] as Array[String]
 	
 	# 天机阵 - 红色外功地面
 	w = _create_base_wuxue("tianji_zhen", "天机阵", "机关", "红", "外功", "指定", 3, 3, 50, 25, 0, 5, 0)
@@ -574,7 +574,7 @@ func _create_jiguan_wuxue():
 	w.description = "布下天机，步步杀机"
 	w.effects.append(_create_effect("地雷", "施放", 1.0, {"mine_id": "tianji", "count": 5, "damage": 300, "duration": 5}))
 	w.effects.append(_create_effect("机关", "时序", 1.0, {"timestamps": [100, 200, 300], "trigger": "tianji_explode"}))
-	w.tags = ["地雷", "机关", "时序", "大招", "机关"]
+	w.tags = ["地雷", "机关", "时序", "大招", "机关"] as Array[String]
 
 func _create_qinggong_wuxue():
 	# 基础轻功
@@ -583,7 +583,7 @@ func _create_qinggong_wuxue():
 	w.description = "轻功入门，行云流水"
 	w.effects.append(_create_effect("加移动", "常驻", 1.0, {"move_range": 1}))
 	w.effects.append(_create_effect("加集气", "常驻", 1.0, {"qi_speed": 0.2}))
-	w.tags = ["移动", "集气", "轻功"]
+	w.tags = ["移动", "集气", "轻功"] as Array[String]
 	
 	# 凌波微步 - 金色内功自身
 	w = _create_base_wuxue("lingbo_weibu", "凌波微步", "轻功", "金", "内功", "自身", 1, 1, 30, 0, 0, 3, 0)
@@ -593,7 +593,7 @@ func _create_qinggong_wuxue():
 	w.effects.append(_create_effect("位移", "受击", 0.5, {"distance": 2, "avoid_damage": true}))
 	w.effects.append(_create_effect("加移动", "常驻", 1.0, {"move_range": 2}))
 	w.effects.append(_create_effect("幻影", "施放后", 1.0, {"duration": 2, "dodge_bonus": 0.3}))
-	w.tags = ["闪避", "位移", "幻影", "移动", "轻功"]
+	w.tags = ["闪避", "位移", "幻影", "移动", "轻功"] as Array[String]
 	
 	# 一苇渡江 - 红色内功自身位移
 	w = _create_base_wuxue("yiwei_dujiang", "一苇渡江", "轻功", "红", "内功", "自身", 1, 5, 40, 0, 0, 4, 0)
@@ -603,7 +603,7 @@ func _create_qinggong_wuxue():
 	w.effects.append(_create_effect("超远位移", "施放", 1.0, {"max_distance": 6, "ignore_obstacle": true}))
 	w.effects.append(_create_effect("无敌", "位移中", 1.0, {"duration": 1}))
 	w.effects.append(_create_effect("留影", "位移后", 1.0, {"phantom_count": 2, "duration": 2}))
-	w.tags = ["超远位移", "无敌", "留影", "大招", "轻功"]
+	w.tags = ["超远位移", "无敌", "留影", "大招", "轻功"] as Array[String]
 
 func _create_neigong_wuxue():
 	# 基础内功
@@ -613,7 +613,7 @@ func _create_neigong_wuxue():
 	w.effects.append(_create_effect("加血上限", "常驻", 1.0, {"hp_percent": 0.1}))
 	w.effects.append(_create_effect("加内力", "常驻", 1.0, {"mp_percent": 0.15}))
 	w.effects.append(_create_effect("回内", "回合开始", 1.0, {"mp_regen": 10}))
-	w.tags = ["血上限", "内力", "回内", "内功"]
+	w.tags = ["血上限", "内力", "回内", "内功"] as Array[String]
 	
 	# 九阳神功 - 金色内功自身
 	w = _create_base_wuxue("jiuyang_shengong", "九阳神功", "内功", "金", "内功", "自身", 1, 1, 0, 0, 0, 0, 0)
@@ -623,7 +623,7 @@ func _create_neigong_wuxue():
 	w.effects.append(_create_effect("反伤", "受击", 0.3, {"rate": 0.5}))
 	w.effects.append(_create_effect("回血", "回合开始", 1.0, {"hp_regen_percent": 0.05}))
 	w.effects.append(_create_effect("狂暴", "血量低", 0.5, {"hp_threshold": 0.3, "atk_bonus": 0.5}))
-	w.tags = ["免疫毒", "反伤", "回血", "狂暴", "内功"]
+	w.tags = ["免疫毒", "反伤", "回血", "狂暴", "内功"] as Array[String]
 	
 	# 九阴真经 - 红色内功自身
 	w = _create_base_wuxue("jiuyin_zhenjing", "九阴真经", "内功", "红", "内功", "自身", 1, 1, 0, 0, 0, 0, 0)
@@ -633,7 +633,7 @@ func _create_neigong_wuxue():
 	w.effects.append(_create_effect("化劲", "受击", 0.5, {"redirect_damage": 0.5}))
 	w.effects.append(_create_effect("吸星", "命中", 0.2, {"steal_mp": 20, "steal_rage": 10}))
 	w.effects.append(_create_effect("易筋", "时序", 1.0, {"timestamps": [200, 400, 600], "random_buff": true}))
-	w.tags = ["阴阳", "化劲", "吸星", "易筋", "内功"]
+	w.tags = ["阴阳", "化劲", "吸星", "易筋", "内功"] as Array[String]
 	
 	# 北冥神功 - 紫色内功单体
 	w = _create_base_wuxue("beiming_shengong", "北冥神功", "内功", "紫", "内功", "单体", 1, 1, 20, 0, 0, 2, 0)
@@ -642,7 +642,7 @@ func _create_neigong_wuxue():
 	w.effects.append(_create_effect("吸内力", "命中", 1.0, {"mp_steal": 30}))
 	w.effects.append(_create_effect("吸怒气", "命中", 0.5, {"rage_steal": 15}))
 	w.effects.append(_create_effect("反噬", "自身", 0.1, {"damage_percent": 0.1}))
-	w.tags = ["吸内力", "吸怒气", "反噬", "内功"]
+	w.tags = ["吸内力", "吸怒气", "反噬", "内功"] as Array[String]
 
 func _create_xinfa_wuxue():
 	# 心法类武学通常是被动，这里作为特殊主动技
@@ -650,13 +650,13 @@ func _create_xinfa_wuxue():
 	w.base_damage = 0
 	w.description = "激发潜能，陷入狂暴"
 	w.effects.append(_create_effect("狂暴", "施放", 1.0, {"atk_bonus": 1.0, "def_penalty": 0.5, "duration": 3, "rage_per_turn": 20}))
-	w.tags = ["狂暴", "变身", "心法"]
+	w.tags = ["狂暴", "变身", "心法"] as Array[String]
 	
 	w = _create_base_wuxue("xinfa_bingxin", "冰心诀", "心法", "紫", "内功", "自身", 1, 1, 20, 0, 0, 2, 0)
 	w.base_damage = 0
 	w.description = "心如止水，免疫控制"
 	w.effects.append(_create_effect("冰心", "施放", 1.0, {"control_immune": true, "damage_reduction": 0.3, "duration": 3}))
-	w.tags = ["免疫控制", "减伤", "心法"]
+	w.tags = ["免疫控制", "减伤", "心法"] as Array[String]
 
 func _create_sect_wuxue():
 	# 恒山派 - 反击流
@@ -728,15 +728,24 @@ func _create_sect_wuxue_branch(sect_id: String, sect_name: String, wuxue_list: A
 	
 	for wuxue in wuxue_list:
 		var w = _create_base_wuxue(
-			wuxue[0], wuxue[1], wuxue[2], wuxue[3], wuxue[4], wuxue[5],
-			wuxue[6].get("range_min", 1), wuxue[6].get("range_max", 1),
-			wuxue[6].get("mp_cost", 0), wuxue[6].get("rage_cost", 0), wuxue[6].get("qi_cost", 0),
-			wuxue[6].get("cooldown", 0), wuxue[6].get("timestamp_offset", 0)
+			wuxue.get("id", ""), 
+			wuxue.get("name", ""), 
+			wuxue.get("type", ""), 
+			wuxue.get("quality", ""), 
+			wuxue.get("damage_type", ""), 
+			wuxue.get("target_type", ""),
+			wuxue.get("range_min", 1), 
+			wuxue.get("range_max", 1),
+			wuxue.get("mp_cost", 0), 
+			wuxue.get("rage_cost", 0), 
+			wuxue.get("qi_cost", 0),
+			wuxue.get("cooldown", 0), 
+			wuxue.get("timestamp_offset", 0)
 		)
-		w.description = wuxue[6].get("description", "")
+		w.description = wuxue.get("description", "")
 		w.is_sect_wuxue = true
 		w.exclusive_sect = sect_id
-		sect_wuxue[sect_id][wuxue[0]] = w
+		sect_wuxue[sect_id][wuxue.get("id", "")] = w
 
 func _create_base_wuxue(id: String, name: String, type: String, quality: String, damage_type: String, target_type: String, 
 	range_min: int, range_max: int, mp_cost: int, rage_cost: int, qi_cost: int, cooldown: int, timestamp_offset: int) -> WuxueData:

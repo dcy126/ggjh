@@ -27,16 +27,25 @@ func _ready():
 	TimeManager.get_instance().connect("season_changed", _on_season_changed)
 
 func _setup_input():
-	Input.map_action("move_up", KEY_W, KEY_UP)
-	Input.map_action("move_down", KEY_S, KEY_DOWN)
-	Input.map_action("move_left", KEY_A, KEY_LEFT)
-	Input.map_action("move_right", KEY_D, KEY_RIGHT)
-	Input.map_action("interact", KEY_E, KEY_SPACE)
-	Input.map_action("menu", KEY_ESCAPE, KEY_TAB)
-	Input.map_action("character", KEY_C)
-	Input.map_action("inventory", KEY_I)
-	Input.map_action("quest", KEY_Q)
-	Input.map_action("map", KEY_M)
+	# 在 Godot 4 中，动态添加输入映射的标准写法
+	_add_action_if_not_exists("move_up", [KEY_W, KEY_UP])
+	_add_action_if_not_exists("move_down", [KEY_S, KEY_DOWN])
+	_add_action_if_not_exists("move_left", [KEY_A, KEY_LEFT])
+	_add_action_if_not_exists("move_right", [KEY_D, KEY_RIGHT])
+	_add_action_if_not_exists("interact", [KEY_E, KEY_SPACE])
+	_add_action_if_not_exists("menu", [KEY_ESCAPE, KEY_TAB])
+	_add_action_if_not_exists("character", [KEY_C])
+	_add_action_if_not_exists("inventory", [KEY_I])
+	_add_action_if_not_exists("quest", [KEY_Q])
+	_add_action_if_not_exists("map", [KEY_M])
+
+func _add_action_if_not_exists(action_name: String, keys: Array):
+	if not InputMap.has_action(action_name):
+		InputMap.add_action(action_name)
+		for key in keys:
+			var event = InputEventKey.new()
+			event.keycode = key
+			InputMap.action_add_event(action_name, event)
 
 func _setup_shortcuts():
 	var shortcuts = [

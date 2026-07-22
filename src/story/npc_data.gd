@@ -28,6 +28,9 @@ class_name NPCData
 @export var gossip_pool: Array[String] = []
 @export var gift_preferences: Dictionary = {}
 @export var relationship_changes: Dictionary = {}
+@export var is_sect_npc: bool:
+	get:
+		return is_leader or is_elder or is_disciple
 
 func _init():
 	if dialogue_ids.is_empty():

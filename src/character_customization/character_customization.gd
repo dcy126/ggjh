@@ -129,7 +129,7 @@ func apply_preset(preset_name: String):
 		if preset.has("title"):
 			title = preset["title"]
 		if preset.has("personality_traits"):
-			personality_traits = preset["personality_traits"]
+			personality_traits.assign(preset["personality_traits"])
 
 func to_dict() -> Dictionary:
 	return {

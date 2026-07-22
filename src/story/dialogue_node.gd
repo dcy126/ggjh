@@ -19,6 +19,7 @@ class_name DialogueNode
 @export var wait_for_input: bool = true
 @export var auto_advance_time: float = 0.0
 
+
 func _init():
 	if choices.is_empty():
 		choices = []

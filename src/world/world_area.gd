@@ -21,6 +21,11 @@ class_name WorldArea
 @export var visit_count: int = 0
 @export var discovered_secrets: Array[String] = []
 @export var exploration_progress: float = 0.0
+@export var boss: String = ""
+@export var rewards: Array = []
+@export var schedule: String = ""
+@export var floors: int = 1
+@export var chapters: int = 1
 
 func _init():
 	if connected_areas.is_empty():
