@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name Guild
 
 @export var guild_id: String

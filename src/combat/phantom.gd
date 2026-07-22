@@ -1,8 +1,8 @@
-extends RefCounted
+extends Resource
 class_name Phantom
 
 @export var phantom_id: String
-@export var owner: BattleCharacter = null
+var owner: BattleCharacter = null
 @export var character_id: String = ""
 @export var name: String = ""
 @export var max_hp: int = 500

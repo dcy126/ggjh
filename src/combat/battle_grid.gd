@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name BattleGrid
 
 @export var width: int = 9

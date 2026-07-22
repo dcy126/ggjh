@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name BattleCharacter
 
 @export var character_id: String
@@ -284,7 +284,7 @@ func check_rage_trigger():
 
 func has_ultimate_ready() -> bool:
 	for wuxue_id in equipped_wuxue:
-		var wuxue = WuxueDatabase.get_wuxue(wuxue_id)
+		var wuxue = WuxueDatabase.instance.get_wuxue(wuxue_id)
 		if wuxue and wuxue.is_ultimate and wuxue.cooldown == 0:
 			if current_mp >= wuxue.mp_cost and rage >= wuxue.rage_cost:
 				return true
@@ -382,7 +382,7 @@ func clear_all_status():
 func has_weapon(weapon_type: String) -> bool:
 	var weapon_id = equipped_items.get("武器", "")
 	if weapon_id:
-		var weapon = EquipmentDatabase.get_equipment(weapon_id)
+		var weapon = EquipmentDatabase.instance.get_equipment(weapon_id)
 		if weapon and weapon.weapon_type == weapon_type:
 			return true
 	return false
@@ -390,7 +390,7 @@ func has_weapon(weapon_type: String) -> bool:
 func get_equipped_wuxue_data() -> Array[WuxueData]:
 	var result = []
 	for wuxue_id in equipped_wuxue:
-		var wuxue = WuxueDatabase.get_wuxue(wuxue_id)
+		var wuxue = WuxueDatabase.instance.get_wuxue(wuxue_id)
 		if wuxue:
 			result.append(wuxue)
 	return result
@@ -398,7 +398,7 @@ func get_equipped_wuxue_data() -> Array[WuxueData]:
 func get_available_wuxue() -> Array[WuxueData]:
 	var result = []
 	for wuxue_id in known_wuxue:
-		var wuxue = WuxueDatabase.get_wuxue(wuxue_id)
+		var wuxue = WuxueDatabase.instance.get_wuxue(wuxue_id)
 		if wuxue and wuxue.can_use(self, CombatManager.instance):
 			result.append(wuxue)
 	return result

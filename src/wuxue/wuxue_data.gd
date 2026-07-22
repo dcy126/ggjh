@@ -117,7 +117,7 @@ func get_damage_at_level(level: int, caster_atk: int, caster_spd: int, caster_de
 	
 	return max(dmg, 1)
 
-func get_heal_at_level(level: int, caster_atk: int, caster_spd: int) -> int:
+func get_heal_at_level(level: int, caster_atk: int, caster_spd: int, caster_def: int) -> int:
 	var heal = base_heal
 	for stat_name in heal_scaling:
 		var scaling = heal_scaling[stat_name]
@@ -135,7 +135,7 @@ func get_heal_at_level(level: int, caster_atk: int, caster_spd: int) -> int:
 	
 	return max(heal, 0)
 
-func get_shield_at_level(level: int, caster_def: int) -> int:
+func get_shield_at_level(level: int, caster_atk: int, caster_def: int) -> int:
 	var shield = shield_amount
 	for stat_name in shield_scaling:
 		var scaling = shield_scaling[stat_name]
@@ -191,7 +191,7 @@ func get_effect_descriptions() -> Array[String]:
 		descs.append("[真解] " + effect.get_description())
 	return descs
 
-func get_range_positions(center: Vector2i, direction: Vector2i, grid: BattleGrid) -> Array[Vector2i]:
+func get_range_positions(center: Vector2i, direction: Vector2i, grid: BattleGrid, team: int = 0) -> Array[Vector2i]:
 	var positions = []
 	match target_type:
 		"单体":
@@ -235,19 +235,19 @@ func get_range_positions(center: Vector2i, direction: Vector2i, grid: BattleGrid
 		"自身":
 			positions.append(center)
 		"友方单体":
-			for pos in grid.get_friendly_positions(caster.team):
+			for pos in grid.get_friendly_positions(team):
 				if center.distance_to(pos) <= range_max:
 					positions.append(pos)
 		"友方全体":
-			positions = grid.get_friendly_positions(caster.team)
+			positions = grid.get_friendly_positions(team)
 		"敌方全体":
-			positions = grid.get_enemy_positions(caster.team)
+			positions = grid.get_enemy_positions(team)
 		"血量最低":
-			var lowest = grid.get_lowest_hp_target(caster.team, false)
+			var lowest = grid.get_lowest_hp_target(team, false)
 			if lowest:
 				positions.append(lowest.grid_pos)
 		"血量最高":
-			var highest = grid.get_highest_hp_target(caster.team, false)
+			var highest = grid.get_highest_hp_target(team, false)
 			if highest:
 				positions.append(highest.grid_pos)
 	return positions

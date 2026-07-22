@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name GuildManager
 
 var current_guild: Guild = null
@@ -11,7 +11,7 @@ var secret_realm_state: String = "未开启"
 
 static var instance: GuildManager = null
 
-func _init():
+func _enter_tree():
 	instance = self
 
 func create_guild(name: String, description: String, leader_id: String, leader_name: String, min_level: int = 1) -> bool:

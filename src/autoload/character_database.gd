@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name CharacterDatabase
 
 static var characters: Dictionary = {}
@@ -10,7 +10,7 @@ static var protagonist: CharacterData = null
 
 var rng: RandomNumberGenerator = null
 
-func _init():
+func _enter_tree():
 	rng = RandomNumberGenerator.new()
 	rng.randomize()
 	_load_all_characters()

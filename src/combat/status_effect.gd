@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name StatusEffect
 
 @export var effect_id: String
@@ -30,8 +30,8 @@ class_name StatusEffect
 @export var last_trigger_turn: int = -1
 
 ## 来源
-@export var source: BattleCharacter = null
-@export var caster: BattleCharacter = null
+var source: BattleCharacter = null
+var caster: BattleCharacter = null
 
 ## 视觉
 @export var particle_effect: String = ""
@@ -146,13 +146,13 @@ func trigger_effect(target: BattleCharacter, trigger_source: BattleCharacter = n
 	match effect_type:
 		"伤害":
 			var dmg = params.get("value", 0) * current_stacks
-			target.take_damage(dmg, params.get("damage_type", "真实"), trigger_source or caster or target)
+			target.take_damage(dmg, params.get("damage_type", "真实"), trigger_source , caster or target)
 		"治疗":
 			var heal = params.get("value", 0) * current_stacks
-			target.heal(heal, trigger_source or caster or target)
+			target.heal(heal, trigger_source)
 		"护盾":
 			var amount = params.get("value", 0) * current_stacks
-			target.add_shield(amount, params.get("shield_type", "通用"), params.get("duration", 1), trigger_source or caster or target)
+			target.add_shield(amount, params.get("shield_type", "通用"), params.get("duration", 1), trigger_source)
 		"加怒气":
 			target.add_rage(params.get("value", 0) * current_stacks)
 		"减怒气":
@@ -307,7 +307,7 @@ func trigger_effect(target: BattleCharacter, trigger_source: BattleCharacter = n
 		"援护":
 			target.add_temp_stat("aid_chance", params.get("value", 0.3) * current_stacks)
 		"挡刀":
-			target.add_temp_stat("block_forced", block_target(params.get("target_id", "")))
+			target.add_temp_stat("block_forced_target", params.get("target_id", ""))
 		"清除增益":
 			target.clear_buffs()
 		"清除减益":
@@ -441,7 +441,7 @@ func create_phantom(owner: BattleCharacter, count: int):
 		phantom.current_hp = phantom.max_hp
 		phantom.atk = int(owner.atk * 0.5)
 		owner.phantoms.append(phantom)
-		var grid = CombatManager.get_instance().battle_grid
+		var grid = CombatManager.instance.battle_grid
 		if grid:
 			var pos = grid.find_empty_adjacent(owner.grid_pos)
 			if pos != Vector2i(-1, -1):
@@ -462,7 +462,7 @@ func create_summon(owner: BattleCharacter, summon_id: String, count: int):
 			summon.def = data.base_def
 			summon.spd = data.base_spd
 		owner.summons.append(summon)
-		var grid = CombatManager.get_instance().battle_grid
+		var grid = CombatManager.instance.battle_grid
 		if grid:
 			var pos = grid.find_empty_adjacent(owner.grid_pos)
 			if pos != Vector2i(-1, -1):
@@ -488,6 +488,201 @@ func place_mine(caster: BattleCharacter, mine_id: String):
 	var grid = CombatManager.get_instance().battle_grid
 	if grid:
 		grid.add_mine(caster.grid_pos, mine_id, caster)
+
+# 缺失的触发函数实现
+func block_target(target_id: String) -> bool:
+	# 强制挡刀目标
+	return true
+
+func trigger_coop(target: BattleCharacter, params: Dictionary):
+	# 协同攻击
+	var allies = CombatManager.get_instance().get_allies(target.team)
+	for ally in allies:
+		if ally != target and ally.is_alive() and randf() < params.get("chance", 0.3):
+			var enemies = CombatManager.get_instance().get_enemies(target.team)
+			if enemies.size() > 0:
+				var enemy = enemies[randi() % enemies.size()]
+				CombatManager.get_instance().execute_basic_attack(ally, enemy)
+
+func trigger_link(target: BattleCharacter, params: Dictionary):
+	# 连携攻击
+	var link_target = params.get("target", "enemy")
+	var enemies = CombatManager.get_instance().get_enemies(target.team)
+	if enemies.size() > 0:
+		var enemy = enemies[0]
+		CombatManager.get_instance().execute_basic_attack(target, enemy)
+
+func trigger_combo(target: BattleCharacter, params: Dictionary):
+	# 合击
+	var combo_count = params.get("count", 2)
+	for i in range(combo_count):
+		var enemies = CombatManager.get_instance().get_enemies(target.team)
+		if enemies.size() > 0:
+			var enemy = enemies[randi() % enemies.size()]
+			CombatManager.get_instance().execute_basic_attack(target, enemy)
+
+func trigger_chain(target: BattleCharacter, params: Dictionary):
+	# 连环攻击
+	var chain_count = params.get("count", 3)
+	for i in range(chain_count):
+		var enemies = CombatManager.get_instance().get_enemies(target.team)
+		if enemies.size() > 0:
+			var enemy = enemies[randi() % enemies.size()]
+			CombatManager.get_instance().execute_basic_attack(target, enemy)
+
+func trigger_dance(target: BattleCharacter, params: Dictionary):
+	# 连舞攻击
+	trigger_chain(target, params)
+
+func trigger_slash(target: BattleCharacter, params: Dictionary):
+	# 连斩攻击
+	trigger_chain(target, params)
+
+func trigger_stab(target: BattleCharacter, params: Dictionary):
+	# 连刺攻击
+	trigger_chain(target, params)
+
+func trigger_shot(target: BattleCharacter, params: Dictionary):
+	# 连射攻击
+	trigger_chain(target, params)
+
+func trigger_cleave(target: BattleCharacter, params: Dictionary):
+	# 连劈攻击
+	trigger_chain(target, params)
+
+func trigger_chop(target: BattleCharacter, params: Dictionary):
+	# 连砍攻击
+	trigger_chain(target, params)
+
+func trigger_sweep(target: BattleCharacter, params: Dictionary):
+	# 连扫攻击
+	trigger_chain(target, params)
+
+func trigger_poke(target: BattleCharacter, params: Dictionary):
+	# 连点攻击
+	trigger_chain(target, params)
+
+func trigger_press(target: BattleCharacter, params: Dictionary):
+	# 连按攻击
+	trigger_chain(target, params)
+
+func trigger_push(target: BattleCharacter, params: Dictionary):
+	# 连推攻击
+	trigger_chain(target, params)
+
+func trigger_pull(target: BattleCharacter, params: Dictionary):
+	# 连拉攻击
+	trigger_chain(target, params)
+
+func trigger_spin(target: BattleCharacter, params: Dictionary):
+	# 连转攻击
+	trigger_chain(target, params)
+
+func trigger_fly(target: BattleCharacter, params: Dictionary):
+	# 连飞攻击
+	trigger_chain(target, params)
+
+func trigger_fall(target: BattleCharacter, params: Dictionary):
+	# 连落攻击
+	trigger_chain(target, params)
+
+func trigger_roll(target: BattleCharacter, params: Dictionary):
+	# 连滚攻击
+	trigger_chain(target, params)
+
+func trigger_jump(target: BattleCharacter, params: Dictionary):
+	# 连跳攻击
+	trigger_chain(target, params)
+
+func trigger_flash(target: BattleCharacter, params: Dictionary):
+	# 连闪攻击
+	trigger_chain(target, params)
+
+func trigger_shadow(target: BattleCharacter, params: Dictionary):
+	# 连影攻击
+	trigger_chain(target, params)
+
+func trigger_phantom(target: BattleCharacter, params: Dictionary):
+	# 连分身
+	CombatManager.get_instance().summon_phantom(target, params.get("count", 1), params.get("duration", 2))
+
+func trigger_summon(target: BattleCharacter, params: Dictionary):
+	# 连召唤
+	CombatManager.get_instance().summon_unit(target.team, params.get("summon_id", ""), target.grid_pos, params.get("duration", 3))
+
+func trigger_transform(target: BattleCharacter, params: Dictionary):
+	# 连变身
+	target.transform(params.get("form_id", ""), params.get("duration", -1))
+
+func trigger_butterfly(target: BattleCharacter, params: Dictionary):
+	# 连化蝶
+	target.current_form = "化蝶"
+	target.form_data = params
+
+func trigger_demon_blade(target: BattleCharacter, params: Dictionary):
+	# 连魔刀
+	target.current_form = "魔刀"
+	target.form_data = params
+
+func trigger_buddha_blade(target: BattleCharacter, params: Dictionary):
+	# 连佛刀
+	target.current_form = "佛刀"
+	target.form_data = params
+
+func trigger_yinyang(target: BattleCharacter, params: Dictionary):
+	# 连阴阳
+	target.current_form = "阴阳"
+	target.form_data = params
+
+func trigger_phantom_form(target: BattleCharacter, params: Dictionary):
+	# 连幻影
+	target.current_form = "幻影"
+	target.form_data = params
+
+func trigger_mechanism(target: BattleCharacter, params: Dictionary):
+	# 连机关
+	CombatManager.get_instance().place_trap(target.team, target.grid_pos, params.get("trap_type", ""), params.get("duration", 3))
+
+func trigger_mine(target: BattleCharacter, params: Dictionary):
+	# 连地雷
+	CombatManager.get_instance().place_mine(target.team, target.grid_pos, params.get("damage", 100), params.get("duration", 3))
+
+func trigger_dragon_fist(target: BattleCharacter, params: Dictionary):
+	# 连龙拳
+	target.current_form = "龙拳"
+	target.form_data = params
+
+func trigger_sword_qi(target: BattleCharacter, params: Dictionary):
+	# 连剑气
+	target.current_form = "剑气"
+	target.form_data = params
+
+func trigger_internal_injury(target: BattleCharacter, params: Dictionary):
+	# 连内伤
+	target.add_status("内伤", params.get("duration", 3), params.get("value", 10))
+
+func trigger_heavy_sword(target: BattleCharacter, params: Dictionary):
+	# 连重剑
+	target.current_form = "重剑"
+	target.form_data = params
+
+func trigger_mercy(target: BattleCharacter, params: Dictionary):
+	# 连慈悲
+	target.current_form = "慈悲相"
+	target.form_data = params
+
+func trigger_wrath(target: BattleCharacter, params: Dictionary):
+	# 连忿怒
+	target.current_form = "忿怒相"
+	target.form_data = params
+
+func trigger_aid(target: BattleCharacter, params: Dictionary):
+	# 连援护
+	target.add_temp_stat("aid_chance", params.get("value", 0.3))
+
+func trigger_block(target: BattleCharacter, params: Dictionary):
+	# 连挡刀
+	target.add_temp_stat("block_forced", true)
 
 func to_dict() -> Dictionary:
 	return {

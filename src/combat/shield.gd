@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name Shield
 
 @export var shield_id: String
@@ -7,7 +7,7 @@ class_name Shield
 @export var shield_type: String = "通用"
 @export var duration: int = 1
 @export var remaining_turns: int = 1
-@export var source: BattleCharacter = null
+var source: BattleCharacter = null
 @export var can_crit: bool = false
 @export var block_types: Array[String] = ["外功", "内功", "混合", "定伤"]
 @export var on_break_effects: Array[Dictionary] = []

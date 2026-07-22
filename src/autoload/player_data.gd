@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name PlayerData
 
 var player_id: String = ""
@@ -68,7 +68,7 @@ var settings: Dictionary = {}
 
 static var instance: PlayerData = null
 
-func _init():
+func _enter_tree():
 	instance = self
 	_load_settings()
 

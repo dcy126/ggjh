@@ -1,8 +1,8 @@
-extends RefCounted
+extends Resource
 class_name Summon
 
 @export var summon_id: String
-@export var owner: BattleCharacter = null
+var owner: BattleCharacter = null
 @export var name: String = ""
 @export var max_hp: int = 1000
 @export var current_hp: int = 1000

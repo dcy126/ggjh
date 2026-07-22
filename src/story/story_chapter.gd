@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name StoryChapter
 
 @export var id: String

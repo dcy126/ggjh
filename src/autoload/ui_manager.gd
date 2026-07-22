@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name UIManager
 
 var current_scene: Node = null
@@ -33,7 +33,7 @@ signal ui_opened(ui_name: String)
 signal ui_closed(ui_name: String)
 signal ui_switched(from_ui: String, to_ui: String)
 
-func _init():
+func _enter_tree():
 	instance = self
 	_preload_ui_scenes()
 

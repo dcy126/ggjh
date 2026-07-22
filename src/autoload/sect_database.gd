@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name SectDatabase
 
 var sect_list: Dictionary = {}
@@ -9,7 +9,7 @@ var contribution_rewards: Dictionary = {}
 
 static var instance: SectDatabase = null
 
-func _init():
+func _enter_tree():
 	instance = self
 	_load_all_sects()
 

@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name BodyData
 
 @export var height: float = 1.0

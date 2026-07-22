@@ -1,11 +1,11 @@
-extends RefCounted
+extends Node
 class_name EquipmentSetDatabase
 
 var equipment_sets: Dictionary = {}
 
 static var instance: EquipmentSetDatabase = null
 
-func _init():
+func _enter_tree():
 	instance = self
 	_load_all_sets()
 

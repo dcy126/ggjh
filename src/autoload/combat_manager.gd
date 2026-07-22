@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name CombatManager
 
 var battle_grid: BattleGrid = null
@@ -41,7 +41,7 @@ var on_character_death: Callable
 
 static var instance: CombatManager = null
 
-func _init():
+func _enter_tree():
 	instance = self
 	rng = RandomNumberGenerator.new()
 	rng.randomize()

@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name FaceData
 
 @export var face_shape: int = 0

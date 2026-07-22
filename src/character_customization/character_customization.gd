@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name CharacterCustomization
 
 @export var face_data: FaceData = null

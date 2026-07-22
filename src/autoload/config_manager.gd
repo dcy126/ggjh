@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name ConfigManager
 
 var config: Dictionary = {}
@@ -6,7 +6,7 @@ var config_path: String = "user://config.cfg"
 
 static var instance: ConfigManager = null
 
-func _init():
+func _enter_tree():
 	instance = self
 	_load_config()
 

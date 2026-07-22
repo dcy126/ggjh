@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name WuxueDatabase
 
 var wuxue_list: Dictionary = {}
@@ -8,11 +8,14 @@ var wuxue_by_sect: Dictionary = {}
 var sect_wuxue: Dictionary = {}
 var ultimate_wuxue: Array[WuxueData] = []
 var combo_wuxue: Dictionary = {}
+var rng: RandomNumberGenerator
 
 static var instance: WuxueDatabase = null
 
-func _init():
+func _enter_tree():
 	instance = self
+	rng = RandomNumberGenerator.new()
+	rng.randomize()
 	_load_all_wuxue()
 
 func _load_all_wuxue():

@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name Choice
 
 @export var id: String

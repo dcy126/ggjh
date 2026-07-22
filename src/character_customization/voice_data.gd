@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name VoiceData
 
 @export var voice_type: int = 0

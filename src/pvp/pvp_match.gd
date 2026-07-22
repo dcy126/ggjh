@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name PvPMatch
 
 @export var match_id: String

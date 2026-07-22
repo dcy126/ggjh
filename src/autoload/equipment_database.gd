@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name EquipmentDatabase
 
 var equipment_list: Dictionary = {}
@@ -10,7 +10,7 @@ var gem_list: Dictionary = {}
 
 static var instance: EquipmentDatabase = null
 
-func _init():
+func _enter_tree():
 	instance = self
 	_load_all_equipment()
 

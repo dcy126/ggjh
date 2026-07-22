@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name XinfaDatabase
 
 var xinfa_list: Dictionary = {}
@@ -6,11 +6,13 @@ var xinfa_by_slot: Dictionary = {}
 var xinfa_by_color: Dictionary = {}
 var xinfa_by_quality: Dictionary = {}
 var xinfa_sets: Dictionary = {}
+var rng: RandomNumberGenerator
 
 static var instance: XinfaDatabase = null
 
-func _init():
+func _enter_tree():
 	instance = self
+	rng = RandomNumberGenerator.new()
 	_load_all_xinfa()
 
 func _load_all_xinfa():

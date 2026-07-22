@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name AudioManager
 
 var bgm_player: AudioStreamPlayer = null
@@ -15,7 +15,7 @@ var sfx_library: Dictionary = {}
 
 static var instance: AudioManager = null
 
-func _init():
+func _enter_tree():
 	instance = self
 	_setup_audio_players()
 	_load_audio_library()

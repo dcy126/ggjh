@@ -1,6 +1,7 @@
-extends RefCounted
+extends Node
 class_name WorldManager
 
+var areas: Dictionary = {}
 var current_area: WorldArea = null
 var visited_areas: Dictionary = {}
 var area_progress: Dictionary = {}
@@ -11,11 +12,13 @@ var world_time: int = 0
 var day_cycle: int = 0
 var weather: String = "晴"
 var season: String = "春"
+var rng: RandomNumberGenerator
 
 static var instance: WorldManager = null
 
-func _init():
+func _enter_tree():
 	instance = self
+	rng = RandomNumberGenerator.new()
 	_load_world_data()
 
 func _load_world_data():
@@ -38,7 +41,7 @@ func _create_areas():
 	area.events = ["event_hangzhou_festival", "event_hangzhou_tournament"]
 	area.secret_locations = ["hangzhou_secret_cave", "hangzhou_underground_market"]
 	area.background_music = "hangzhou_theme"
-	area_background = "hangzhou_bg"
+	area.background_image = "hangzhou_bg"
 	
 	areas[area.id] = area
 	

@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name StoryDatabase
 
 var story_chapters: Dictionary = {}
@@ -8,11 +8,14 @@ var quests: Dictionary = {}
 var choices: Dictionary = {}
 var world_states: Dictionary = {}
 var npcs: Dictionary = {}
+var rng: RandomNumberGenerator
 
 static var instance: StoryDatabase = null
 
-func _init():
+func _enter_tree():
 	instance = self
+	rng = RandomNumberGenerator.new()
+	rng.randomize()
 	_load_all_story_data()
 
 func _load_all_story_data():

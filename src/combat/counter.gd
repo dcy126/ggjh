@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name Counter
 
 @export var counter_id: String

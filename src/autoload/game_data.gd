@@ -167,7 +167,7 @@ const ROGUELIKE_BOSS_INTERVAL: int = 10
 ## 活动
 const EVENT_TYPES: Array[String] = ["日常", "周常", "限时", "节日", "周年庆", "版本更新", "联动", "跨服", "帮会", "论剑赛季"]
 
-func _init():
+func _enter_tree():
 	instance = self
 	_init_potential_exp()
 

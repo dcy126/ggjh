@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name EventManager
 
 var event_listeners: Dictionary = {}
@@ -11,7 +11,7 @@ static var instance: EventManager = null
 
 signal event_emitted(event_name: String, params: Array)
 
-func _init():
+func _enter_tree():
 	instance = self
 
 func emit(event_name: String, *params):

@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name PvPManager
 
 var current_match: PvPMatch = null
@@ -14,7 +14,7 @@ var season_end_time: int = 0
 
 static var instance: PvPManager = null
 
-func _init():
+func _enter_tree():
 	instance = self
 	_load_pvp_data()
 

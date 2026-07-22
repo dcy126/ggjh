@@ -4,7 +4,7 @@ class_name EquipmentSetData
 @export var id: String
 @export var name: String
 @export var description: String = ""
-@export var piece_ids: Array[String] = []
+@export var piece_ids: Array = []
 @export var effects: Dictionary = {}  # piece_count -> effect_dict
 
 @export var max_pieces: int = 6

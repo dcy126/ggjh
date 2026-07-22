@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name SaveManager
 
 var save_slots: Dictionary = {}
@@ -16,7 +16,7 @@ signal load_started(slot: int)
 signal load_completed(slot: int, success: bool)
 signal auto_save_triggered()
 
-func _init():
+func _enter_tree():
 	instance = self
 	_load_save_index()
 

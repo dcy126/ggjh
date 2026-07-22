@@ -1,4 +1,4 @@
-extends RefCounted
+extends Resource
 class_name GuildMember
 
 @export var player_id: String = ""

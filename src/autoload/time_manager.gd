@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name TimeManager
 
 var game_time: int = 0
@@ -21,7 +21,7 @@ var weather_duration: int = 10 * 60  # 10分钟
 
 static var instance: TimeManager = null
 
-func _init():
+func _enter_tree():
 	instance = self
 	real_time_start = Time.get_unix_time_from_system()
 	_calculate_initial_time()
