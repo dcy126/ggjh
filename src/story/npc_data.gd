@@ -69,7 +69,7 @@ func can_recruit(player_data: PlayerData) -> bool:
 	# 这里可以解析recruit_condition
 	return true
 
-def to_dict() -> Dictionary:
+func to_dict() -> Dictionary:
 	return {
 		"id": id,
 		"name": name,

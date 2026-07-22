@@ -11,7 +11,9 @@ var traps: Dictionary = {}  # position -> trap_data
 var mines: Dictionary = {}  # position -> mine_data
 var obstacles: Array[Vector2i] = []
 
-func _init():
+func _init(p_width: int = 9, p_height: int = 6):
+	width = p_width
+	height = p_height
 	_init_grid()
 
 func _init_grid():
@@ -301,7 +303,7 @@ func add_mine(pos: Vector2i, mine_id: String, caster: BattleCharacter):
 func trigger_trap(pos: Vector2i, triggerer: BattleCharacter):
 	if traps.has(pos):
 		var trap = traps[pos]
-		var trap_data = TrapDatabase.get_trap(trap["id"])
+		var trap_data = _get_trap_database().get_trap(trap["id"])
 		if trap_data:
 			trap_data.trigger(triggerer, trap["caster"])
 		traps.erase(pos)
@@ -309,7 +311,7 @@ func trigger_trap(pos: Vector2i, triggerer: BattleCharacter):
 func trigger_mine(pos: Vector2i, triggerer: BattleCharacter):
 	if mines.has(pos):
 		var mine = mines[pos]
-		var mine_data = MineDatabase.get_mine(mine["id"])
+		var mine_data = _get_mine_database().get_mine(mine["id"])
 		if mine_data:
 			mine_data.explode(triggerer, mine["caster"])
 		mines.erase(pos)
@@ -387,3 +389,9 @@ func from_dict(data: Dictionary):
 	traps = data.get("traps", {})
 	mines = data.get("mines", {})
 	obstacles = data.get("obstacles", [])
+
+func _get_trap_database():
+	return load("res://src/combat/trap_database.gd")
+
+func _get_mine_database():
+	return load("res://src/combat/mine_database.gd")

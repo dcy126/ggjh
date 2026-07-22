@@ -4,7 +4,10 @@ class_name ConfigManager
 var config: Dictionary = {}
 var config_path: String = "user://config.cfg"
 
-static var instance: ConfigManager = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self
@@ -69,16 +72,16 @@ func _set_defaults():
 		"accessibility/screen_reader": false
 	}
 
-func get(key: String, default = null):
+func get_config_value(key: String, default = null):
 	return config.get(key, default)
 
-func set(key: String, value):
+func set_config_value(key: String, value):
 	if config.has(key) and config[key] == value:
 		return
 	
 	config[key] = value
 	_apply_setting(key, value)
-	EventManager.get_instance().emit("config_changed", key, value)
+	EventManager.instance.emit("config_changed", key, value)
 
 func _apply_setting(key: String, value):
 	match key:
@@ -92,7 +95,7 @@ func _apply_setting(key: String, value):
 			DisplayServer.window_set_size(Vector2i(w, h))
 		"video/borderless":
 			if value and not config.get("video/fullscreen", false):
-				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_BORDERLESS)
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		"video/frame_rate_limit":
 			Engine.max_fps = value
 		"video/graphics_quality":
@@ -114,21 +117,14 @@ func _apply_setting(key: String, value):
 
 func _apply_graphics_quality(quality: int):
 	match quality:
-		0: # 低
-			RenderingServer.canvas_item_set_default_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
-			RenderingServer.set_use_2d_aa(false)
-		1: # 中
-			RenderingServer.canvas_item_set_default_texture_filter(CanvasItem.TEXTURE_FILTER_LINEAR)
-			RenderingServer.set_use_2d_aa(true)
-			RenderingServer.set_aa_samples(2)
-		2: # 高
-			RenderingServer.canvas_item_set_default_texture_filter(CanvasItem.TEXTURE_FILTER_LINEAR)
-			RenderingServer.set_use_2d_aa(true)
-			RenderingServer.set_aa_samples(4)
-		3: # 超高
-			RenderingServer.canvas_item_set_default_texture_filter(CanvasItem.TEXTURE_FILTER_LINEAR)
-			RenderingServer.set_use_2d_aa(true)
-			RenderingServer.set_aa_samples(8)
+		0:
+			pass
+		1:
+			pass
+		2:
+			pass
+		3:
+			pass
 
 func _set_ui_scale(scale: float):
 	# 应用到UI层
@@ -156,7 +152,7 @@ func save():
 			file.set_value(section, key, sections[section][key])
 	
 	file.save(config_path)
-	EventManager.get_instance().emit("config_saved")
+	EventManager.instance.emit("config_saved")
 
 func reset_to_defaults():
 	_set_defaults()
@@ -205,7 +201,7 @@ func import_config(path: String) -> bool:
 func linear_to_db(linear: float) -> float:
 	if linear <= 0:
 		return -80.0
-	return 20.0 * log10(linear)
+	return 20.0 * log(linear) / log(10.0)
 
 func db_to_linear(db: float) -> float:
 	if db <= -80.0:

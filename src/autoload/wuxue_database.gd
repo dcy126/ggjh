@@ -10,7 +10,10 @@ var ultimate_wuxue: Array[WuxueData] = []
 var combo_wuxue: Dictionary = {}
 var rng: RandomNumberGenerator
 
-static var instance: WuxueDatabase = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self

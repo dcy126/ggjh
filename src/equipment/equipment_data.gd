@@ -109,7 +109,7 @@ func get_total_stats() -> Dictionary:
 	
 	# 宝石加成
 	for gem_id in equipped_gems:
-		var gem = EquipmentDatabase.get_gem(gem_id)
+		var gem = EquipmentDatabase.instance.get_gem(gem_id)
 		if gem:
 			for stat in gem.stats:
 				result[stat] = result.get(stat, 0) + gem.stats[stat]
@@ -180,7 +180,9 @@ func add_gem(gem_id: String) -> bool:
 
 func remove_gem(index: int) -> String:
 	if index >= 0 and index < equipped_gems.size():
-		return equipped_gems.remove_at(index)
+		var gem = equipped_gems[index]
+		equipped_gems.remove_at(index)
+		return gem
 	return ""
 
 func set_dye(dye_id: String):
@@ -190,7 +192,7 @@ func set_dye(dye_id: String):
 func get_set_effect(piece_count: int) -> Dictionary:
 	if set_id == "":
 		return {}
-	var set_data = EquipmentSetDatabase.get_set(set_id)
+	var set_data = EquipmentSetDatabase.instance.get_set(set_id)
 	if set_data:
 		return set_data.get_effect(piece_count)
 	return {}

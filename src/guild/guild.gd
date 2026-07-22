@@ -219,7 +219,7 @@ func start_secret_realm() -> bool:
 	EventManager.get_instance().emit("guild_secret_realm_started", guild_id)
 	return true
 
-func complete_secret_realm_floor(floor: Int):
+func complete_secret_realm_floor(floor: int):
 	if floor > secret_realm_progress.current_floor:
 		secret_realm_progress.current_floor = floor
 	if floor > secret_realm_progress.best_floor:
@@ -250,7 +250,7 @@ func get_power_ranking() -> int:
 
 func get_top_members(count: int = 10) -> Array[GuildMember]:
 	var sorted = members.duplicate()
-	sorted.sort_custom(self, "_compare_power")
+	sorted.sort_custom(_compare_power)
 	return sorted.slice(0, min(count, sorted.size()))
 
 func _compare_power(a: GuildMember, b: GuildMember) -> int:
@@ -265,6 +265,12 @@ func _get_rank_value(position: String) -> int:
 		"成员": return 1
 	return 0
 
+func _members_to_dict() -> Array:
+	var result = []
+	for m in members:
+		result.append(m.to_dict())
+	return result
+
 func to_dict() -> Dictionary:
 	return {
 		"guild_id": guild_id,
@@ -274,7 +280,7 @@ func to_dict() -> Dictionary:
 		"level": level,
 		"exp": exp,
 		"max_members": max_members,
-		"members": [m.to_dict() for m in members],
+		"members": _members_to_dict(),
 		"contribution": contribution,
 		"weekly_contribution": weekly_contribution,
 		"funds": funds,

@@ -8,9 +8,13 @@ var quests: Dictionary = {}
 var choices: Dictionary = {}
 var world_states: Dictionary = {}
 var npcs: Dictionary = {}
+var world_events: Dictionary = {}
 var rng: RandomNumberGenerator
 
-static var instance: StoryDatabase = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self
@@ -172,7 +176,7 @@ func _create_main_quests():
 
 func _create_chapter_objectives(chapter: int) -> Array[Dictionary]:
 	var objs = []
-	var obj_count = 3 + (chapter // 3)
+	var obj_count = 3 + int(chapter / 3)
 	for j in range(obj_count):
 		objs.append({
 			"id": "obj_ch%d_%d" % [chapter, j],
@@ -234,7 +238,7 @@ func _create_side_quests():
 	_create_encounter_quests()
 
 func _create_companion_quests():
-	var companions = CharacterDatabase.get_instance().get_recruitable_characters()
+	var companions = CharacterDatabase.instance.get_recruitable_characters()
 	for char in companions:
 		if char.recruit_chapter > 0:
 			var q = Quest.new()
@@ -248,7 +252,7 @@ func _create_companion_quests():
 			quests[q.id] = q
 
 func _create_sect_quests():
-	for sect_id in SectDatabase.get_instance().get_all_sects():
+	for sect_id in SectDatabase.instance.get_all_sects():
 		var sect = sect_id
 		for level in [1, 5, 10, 15, 20]:
 			var q = Quest.new()
@@ -344,7 +348,7 @@ func _create_main_npcs():
 		npcs[npc.id] = npc
 
 func _create_sect_npcs():
-	for sect in SectDatabase.get_instance().get_all_sects():
+	for sect in SectDatabase.instance.get_all_sects():
 		# 掌门
 		var npc = NPCData.new()
 		npc.id = "npc_sect_%s_leader" % sect.id
@@ -385,7 +389,8 @@ func _create_city_npcs():
 	var roles = ["客栈老板", "铁匠", "药师", "说书人", "茶馆老板", "捕快", "商人", "乞丐", "守卫", "衙役"]
 	
 	for city in cities:
-		for i, role in enumerate(roles):
+		for i in range(roles.size()):
+			var role = roles[i]
 			var npc = NPCData.new()
 			npc.id = "npc_%s_%s" % [city, role]
 			npc.name = "%s%s" % [city, role]
@@ -443,6 +448,7 @@ func _create_world_events():
 	evt.rewards = {"exp": 50000, "contribution": 2000, "title": "门派武林高手"}
 	evt.map_areas = ["各大门派"]
 	world_states["event_sect_tournament"] = {"active": false, "progress": 0}
+	_store_world_event(evt)
 	
 	# 世界事件：论剑赛季
 	evt = WorldEvent.new()
@@ -456,6 +462,7 @@ func _create_world_events():
 	evt.rewards = {"rank_rewards": true, "skin": "赛季皮肤", "title": "论剑冠军"}
 	evt.map_areas = ["论剑台"]
 	world_states["event_lunjian_season"] = {"active": false, "season": 1}
+	_store_world_event(evt)
 	
 	# 世界事件：帮会秘境
 	evt = WorldEvent.new()
@@ -469,6 +476,7 @@ func _create_world_events():
 	evt.rewards = {"secret_realm_materials": true, "guild_contribution": 500}
 	evt.map_areas = ["帮会秘境"]
 	world_states["event_guild_secret_realm"] = {"active": false}
+	_store_world_event(evt)
 	
 	# 世界事件：海市蜃楼
 	evt = WorldEvent.new()
@@ -482,6 +490,7 @@ func _create_world_events():
 	evt.rewards = {"xinfa_materials": true, "rare_equipment": true, "title": "幻境探险家"}
 	evt.map_areas = ["海市蜃楼"]
 	world_states["event_haishi_shenlou"] = {"active": false}
+	_store_world_event(evt)
 	
 	# 世界事件：列星巅峰
 	evt = WorldEvent.new()
@@ -495,6 +504,7 @@ func _create_world_events():
 	evt.rewards = {"star_rewards": true, "title": "列星巅峰王者"}
 	evt.map_areas = ["列星塔"]
 	world_states["event_liexing_dianfeng"] = {"active": true, "floor": 1}
+	_store_world_event(evt)
 	
 	# 世界事件：四海浮生记
 	evt = WorldEvent.new()
@@ -508,6 +518,7 @@ func _create_world_events():
 	evt.rewards = {"story_rewards": true, "character": "季璘", "skin": "蛟龙镇海"}
 	evt.map_areas = ["四海", "浮生岛", "龙宫"]
 	world_states["event_sihai_fusheng"] = {"active": false, "progress": 0}
+	_store_world_event(evt)
 	
 	# 世界事件：七时桃源
 	evt = WorldEvent.new()
@@ -521,6 +532,7 @@ func _create_world_events():
 	evt.rewards = {"skin": "桃花装扮", "title": "桃源有缘人", "pet": "桃花精"}
 	evt.map_areas = ["桃源"]
 	world_states["event_qishi_taoyuan"] = {"active": false}
+	_store_world_event(evt)
 	
 	# 世界事件：周年庆
 	evt = WorldEvent.new()
@@ -534,6 +546,10 @@ func _create_world_events():
 	evt.rewards = {"login_rewards": true, "anniversary_skin": true, "title": "周年庆参与者", "copper": 1000000}
 	evt.map_areas = ["主城", "活动中心"]
 	world_states["event_anniversary"] = {"active": false, "year": 1}
+	_store_world_event(evt)
+
+func _store_world_event(evt):
+	world_events[evt.id] = evt
 
 func _create_dialogues():
 	# 主线对话
@@ -573,7 +589,7 @@ func _create_npc_daily_dialogues():
 				dialogues[d.id] = d
 
 func _create_recruit_dialogues():
-	for char in CharacterDatabase.get_instance().get_recruitable_characters():
+	for char in CharacterDatabase.instance.get_recruitable_characters():
 		var d = DialogueNode.new()
 		d.id = "dialogue_recruit_%s" % char.id
 		d.speaker = "npc_%s" % char.id
@@ -634,7 +650,7 @@ func get_world_state(id: String) -> Dictionary:
 
 func set_world_state(id: String, state: Dictionary):
 	world_states[id] = state
-	EventManager.get_instance().emit("world_state_changed", id, state)
+	EventManager.instance.emit("world_state_changed", id, state)
 
 func get_random_encounter(current_map: String, time_of_day: String = "day") -> Quest:
 	var candidates = []

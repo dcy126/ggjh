@@ -7,42 +7,48 @@ var is_processing: bool = false
 var event_history: Array[Dictionary] = []
 var max_history: int = 1000
 
-static var instance: EventManager = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 signal event_emitted(event_name: String, params: Array)
 
 func _enter_tree():
 	instance = self
 
-func emit(event_name: String, *params):
+func emit(event_name, arg1 = null, arg2 = null, arg3 = null, arg4 = null, arg5 = null):
+	var __a = [arg1, arg2, arg3, arg4, arg5]
+	var args = []
+	for a in __a:
+		if a != null:
+			args.append(a)
 	var event_data = {
 		"name": event_name,
-		"params": params,
+		"params": args,
 		"timestamp": Time.get_unix_time_from_system(),
 		"frame": Engine.get_frames_drawn()
 	}
 	
-	# 同步调用监听器
 	if event_listeners.has(event_name):
 		for listener in event_listeners[event_name]:
 			if listener[0].is_valid():
 				var callable = listener[1]
-				callable.callv(params)
+				callable.callv(args)
 	
-	# 添加到队列供异步处理
 	event_queue.append(event_data)
-	
-	# 记录历史
 	_add_to_history(event_data)
-	
-	# 发射信号
-	event_emitted.emit(event_name, params)
+	event_emitted.emit(event_name, args)
 
-func emit_async(event_name: String, *params):
-	# 只加入队列，不立即执行
+func emit_async(event_name, arg1 = null, arg2 = null, arg3 = null, arg4 = null, arg5 = null):
+	var __a = [arg1, arg2, arg3, arg4, arg5]
+	var args = []
+	for a in __a:
+		if a != null:
+			args.append(a)
 	var event_data = {
 		"name": event_name,
-		"params": params,
+		"params": args,
 		"timestamp": Time.get_unix_time_from_system(),
 		"frame": Engine.get_frames_drawn()
 	}
@@ -54,7 +60,7 @@ func _add_to_history(event_data: Dictionary):
 	if event_history.size() > max_history:
 		event_history.remove_at(0)
 
-func connect(event_name: String, listener: Object, method: String, binds: Array = []) -> bool:
+func _connect_listener(event_name: String, listener: Object, method: String, binds: Array = []) -> bool:
 	if not event_listeners.has(event_name):
 		event_listeners[event_name] = []
 	
@@ -68,7 +74,7 @@ func connect(event_name: String, listener: Object, method: String, binds: Array 
 	event_listeners[event_name].append([listener, callable])
 	return true
 
-func disconnect(event_name: String, listener: Object, method: String) -> bool:
+func _disconnect_listener(event_name: String, listener: Object, method: String) -> bool:
 	if not event_listeners.has(event_name):
 		return false
 	
@@ -91,7 +97,7 @@ func clear_event(event_name: String):
 	if event_listeners.has(event_name):
 		event_listeners[event_name].clear()
 
-def clear_all_events():
+func clear_all_events():
 	event_listeners.clear()
 
 func process_queue():

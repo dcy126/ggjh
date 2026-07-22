@@ -8,7 +8,10 @@ var auto_save_interval: int = 300  # 5分钟
 var auto_save_timer: int = 0
 var is_saving: bool = false
 
-static var instance: SaveManager = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 signal save_started(slot: int)
 signal save_completed(slot: int, success: bool)
@@ -48,7 +51,7 @@ func save_game(slot: int = -1, description: String = "") -> bool:
 	save_started.emit(save_slot)
 	EventManager.instance.emit("save_started", save_slot)
 	
-	var save_data = _create_save_data(description)
+	var save_data = _create_save_data(description, save_slot)
 	var success = _write_save_file(save_slot, save_data)
 	
 	if success:
@@ -61,7 +64,7 @@ func save_game(slot: int = -1, description: String = "") -> bool:
 	
 	return success
 
-func _create_save_data(description: String) -> Dictionary:
+func _create_save_data(description: String, save_slot: int = 0) -> Dictionary:
 	var player = PlayerData.instance
 	var combat = CombatManager.instance
 	var world = WorldManager.instance
@@ -154,7 +157,7 @@ func load_game(slot: int) -> bool:
 func _read_save_file(slot: int) -> Dictionary:
 	var file = FileAccess.open("user://save_%d.sav" % slot, FileAccess.READ)
 	if not file:
-		return null
+		return {}
 	
 	var encrypted = file.get_as_text()
 	file.close()
@@ -162,33 +165,25 @@ func _read_save_file(slot: int) -> Dictionary:
 	var text = _simple_decrypt(encrypted)
 	var json = JSON.parse_string(text)
 	if json.error != OK:
-		return null
+		return {}
 	
 	return json.get_var()
 
 func _apply_save_data(data: Dictionary) -> bool:
-	var player = PlayerData.instance if "instance" in PlayerData else PlayerData
-	var world = WorldManager.instance if "instance" in WorldManager else WorldManager
-	var pvp = PvPManager.instance if "instance" in PvPManager else PvPManager
-	var guild = GuildManager.instance if "instance" in GuildManager else GuildManager
-	var combat = CombatManager.instance if "instance" in CombatManager else CombatManager
-	var audio = AudioManager.instance if "instance" in AudioManager else AudioManager
-	var ui = UIManager.instance if "instance" in UIManager else UIManager
-	
-	if player and player.has_method("from_dict"):
-		player.from_dict(data.get("player", {}))
-	if world and world.has_method("set_world_state"):
-		world.set_world_state(data.get("world", {}))
-	if pvp and pvp.has_method("from_dict"):
-		pvp.from_dict(data.get("pvp", {}))
-	if guild and guild.has_method("from_dict"):
-		guild.from_dict(data.get("guild", {}))
-	if combat and combat.has_method("from_dict"):
-		combat.from_dict(data.get("combat", {}))
-	if audio and audio.has_method("from_dict"):
-		audio.from_dict(data.get("game_settings", {}))
-	if ui and ui.has_method("from_dict"):
-		ui.from_dict(data.get("ui_state", {}))
+	if data.get("player", {}).size() > 0:
+		PlayerData.instance.from_dict(data["player"])
+	if data.get("world", {}).size() > 0:
+		WorldManager.instance.set_world_state(data["world"])
+	if data.get("pvp", {}).size() > 0:
+		PvPManager.instance.from_dict(data["pvp"])
+	if data.get("guild", {}).size() > 0:
+		GuildManager.instance.from_dict(data["guild"])
+	if data.get("combat", {}).size() > 0:
+		CombatManager.instance.from_dict(data["combat"])
+	if data.get("audio", {}).size() > 0:
+		AudioManager.instance.from_dict(data["audio"])
+	if data.get("ui", {}).size() > 0:
+		UIManager.instance.from_dict(data["ui"])
 	
 	return true
 

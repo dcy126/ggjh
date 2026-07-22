@@ -1,7 +1,10 @@
 extends Node
 class_name GameData
 
-static var instance: GameData = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 @export var game_version: String = "3.8.0"
 @export var game_name: String = "汉家江湖"

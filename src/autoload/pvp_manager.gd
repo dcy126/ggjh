@@ -12,7 +12,10 @@ var is_searching: bool = false
 var current_season: int = 1
 var season_end_time: int = 0
 
-static var instance: PvPManager = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self
@@ -68,11 +71,11 @@ func start_matchmaking(player_team: Array[BattleCharacter], mode: String = "rank
 	
 	is_searching = true
 	var match_data = {
-		"player_id": PlayerData.get_instance().player_id,
-		"team": [c.to_dict() for c in player_team],
+		"player_id": PlayerData.instance.player_id,
+		"team": _team_to_dict(player_team),
 		"mode": mode,
 		"timestamp": Time.get_unix_time_from_system(),
-		"rank_score": PlayerData.get_instance().pvp_rank_score
+		"rank_score": PlayerData.instance.pvp_rank_score
 	}
 	
 	matchmaking_queue.append(match_data)
@@ -80,96 +83,113 @@ func start_matchmaking(player_team: Array[BattleCharacter], mode: String = "rank
 	# 尝试匹配
 	_try_matchmake()
 	
-	EventManager.get_instance().emit("matchmaking_started", mode)
+	EventManager.instance.emit("matchmaking_started", mode)
 	return true
+
+func _parse_team_data(team_data: Array) -> Array:
+	var result = []
+	for c in team_data:
+		var bc = BattleCharacter.new()
+		bc.from_dict(c)
+		result.append(bc)
+	return result
+
+func _match_history_to_dict() -> Array:
+	var result = []
+	for m in match_history:
+		result.append(m.to_dict())
+	return result
+
+func _team_to_dict(team: Array[BattleCharacter]) -> Array:
+	var result = []
+	for c in team:
+		result.append(c.to_dict())
+	return result
 
 func cancel_matchmaking():
 	is_searching = false
 	
 	# 从队列移除
-	var player_id = PlayerData.get_instance().player_id
+	var player_id = PlayerData.instance.player_id
 	for i in range(matchmaking_queue.size()):
 		if matchmaking_queue[i]["player_id"] == player_id:
 			matchmaking_queue.remove_at(i)
 			break
 	
-	EventManager.get_instance().emit("matchmaking_cancelled")
+	EventManager.instance.emit("matchmaking_cancelled")
 
 func _try_matchmake():
-	var player_id = PlayerData.get_instance().player_id
-	var player_data = matchmaking_queue.find(func(m): return m["player_id"] == player_id)
-	if not player_data:
+	var player_id = PlayerData.instance.player_id
+	var player_idx = matchmaking_queue.find(func(m): return m["player_id"] == player_id)
+	if player_idx < 0:
 		return
-	
+	var player_data = matchmaking_queue[player_idx]
 	var player_score = player_data["rank_score"]
 	var best_match = null
 	var best_diff = 999999
 	
-	for match in matchmaking_queue:
-		if match["player_id"] == player_id:
+	for pvp_match3 in matchmaking_queue:
+		if pvp_match3["player_id"] == player_id:
 			continue
-		if match["mode"] != player_data["mode"]:
+		if pvp_match3["mode"] != player_data["mode"]:
 			continue
 		
-		var diff = abs(match["rank_score"] - player_score)
-		if diff < best_diff and diff < 500:  # 段位差距限制
+		var diff = abs(pvp_match3["rank_score"] - player_score)
+		if diff < best_diff and diff < 500:
 			best_diff = diff
-			best_match = match
+			best_match = pvp_match3
 	
 	if best_match:
 		_create_match(player_data, best_match)
 
 func _create_match(player1_data: Dictionary, player2_data: Dictionary):
-	var match = PvPMatch.new()
-	match.match_id = str(Time.get_unix_time_from_system()) + "_" + str(randi())
-	match.player1_id = player1_data["player_id"]
-	match.player2_id = player2_data["player_id"]
-	match.player1_team = [BattleCharacter.new().from_dict(c) for c in player1_data["team"]]
-	match.player2_team = [BattleCharacter.new().from_dict(c) for c in player2_data["team"]]
-	match.mode = player1_data["mode"]
-	match.start_time = Time.get_unix_time_from_system()
-	match.status = "进行中"
+	var pvp_match = PvPMatch.new()
+	pvp_match.match_id = str(Time.get_unix_time_from_system()) + "_" + str(randi())
+	pvp_match.player1_id = player1_data["player_id"]
+	pvp_match.player2_id = player2_data["player_id"]
+	pvp_match.player1_team = _parse_team_data(player1_data["team"])
+	pvp_match.player2_team = _parse_team_data(player2_data["team"])
+	pvp_match.mode = player1_data["mode"]
+	pvp_match.start_time = Time.get_unix_time_from_system()
+	pvp_match.status = "进行中"
 	
 	# 从队列移除
 	matchmaking_queue.erase(player1_data)
 	matchmaking_queue.erase(player2_data)
 	is_searching = false
 	
-	current_match = match
-	match_history.append(match)
+	current_match = pvp_match
+	match_history.append(pvp_match)
 	
 	# 启动战斗
-	CombatManager.get_instance().setup_battle(match.player1_team, match.player2_team, "方阵")
-	CombatManager.get_instance().on_battle_end = Callable(self, "_on_pvp_battle_end").bind(match)
-	CombatManager.get_instance().start_battle()
+	CombatManager.instance.setup_battle(pvp_match.player1_team, pvp_match.player2_team, "方阵")
+	CombatManager.instance.on_battle_end = Callable(self, "_on_pvp_battle_end").bind(pvp_match)
+	CombatManager.instance.start_battle()
 	
-	EventManager.get_instance().emit("pvp_match_found", match)
+	EventManager.instance.emit("pvp_match_found", pvp_match)
 
-func _on_pvp_battle_end(match: PvPMatch, result: String):
-	match.end_time = Time.get_unix_time_from_system()
-	match.result = result
-	match.duration = match.end_time - match.start_time
+func _on_pvp_battle_end(pvp_match2: PvPMatch, result: String):
+	pvp_match2.end_time = Time.get_unix_time_from_system()
+	pvp_match2.result = result
+	pvp_match2.duration = pvp_match2.end_time - pvp_match2.start_time
 	
-	var player_data = PlayerData.get_instance()
-	var is_player1 = player_data.player_id == match.player1_id
+	var player_data = PlayerData.instance
+	var is_player1 = player_data.player_id == pvp_match2.player1_id
 	var player_won = (is_player1 and result == "victory") or (not is_player1 and result == "defeat")
 	
 	if player_won:
-		match.winner_id = player_data.player_id
-		match.loser_id = match.player1_id if is_player1 else match.player2_id
-		player_data.update_pvp_result(true, _calculate_score_change(match, true))
+		pvp_match2.winner_id = player_data.player_id
+		pvp_match2.loser_id = pvp_match2.player1_id if is_player1 else pvp_match2.player2_id
+		player_data.update_pvp_result(true, _calculate_score_change(pvp_match2, true))
 	else:
-		match.winner_id = match.player1_id if not is_player1 else match.player2_id
-		match.loser_id = player_data.player_id
-		player_data.update_pvp_result(false, _calculate_score_change(match, false))
-	
-	# 发放奖励
-	_give_pvp_rewards(player_won, match)
+		pvp_match2.winner_id = pvp_match2.player1_id if not is_player1 else pvp_match2.player2_id
+		pvp_match2.loser_id = player_data.player_id
+		player_data.update_pvp_result(false, _calculate_score_change(pvp_match2, false))
 	
 	current_match = null
-	EventManager.get_instance().emit("pvp_match_end", match)
+	EventManager.instance.emit("pvp_match_end", pvp_match2)
 
-func _calculate_score_change(match: PvPMatch, win: bool) -> int:
+func _calculate_score_change(pvp_match4: PvPMatch, win: bool) -> int:
 	var base_change = 25
 	var rank_diff = 0
 	
@@ -180,8 +200,8 @@ func _calculate_score_change(match: PvPMatch, win: bool) -> int:
 	else:
 		return -(base_change + randi_range(-5, 10))
 
-func _give_pvp_rewards(win: bool, match: PvPMatch):
-	var player_data = PlayerData.get_instance()
+func _give_pvp_rewards(win: bool, pvp_match2: PvPMatch):
+	var player_data = PlayerData.instance
 	
 	if win:
 		# 胜利奖励
@@ -222,10 +242,10 @@ func _get_daily_wins() -> int:
 	return 0  # 简化
 
 func _add_item(item_id: String, count: int):
-	PlayerData.get_instance().add_item(item_id, count)
+	PlayerData.instance.add_item(item_id, count)
 
 func claim_season_rewards():
-	var player_data = PlayerData.get_instance()
+	var player_data = PlayerData.instance
 	var rank = player_data.pvp_rank
 	
 	if rank_rewards.has(rank):
@@ -251,22 +271,22 @@ func claim_season_rewards():
 	# 排名奖励（需要服务器验证）
 	# 这里仅作为示例
 	
-	EventManager.get_instance().emit("season_rewards_claimed", rank)
+	EventManager.instance.emit("season_rewards_claimed", rank)
 
 func _unlock_title(title_id: String):
-	PlayerData.get_instance().unlock_achievement("title_%s" % title_id)
+	PlayerData.instance.unlock_achievement("title_%s" % title_id)
 
 func _unlock_skin(skin_id: String):
-	PlayerData.get_instance().unlock_achievement("skin_%s" % skin_id)
+	PlayerData.instance.unlock_achievement("skin_%s" % skin_id)
 
 func _unlock_mount(mount_id: String):
-	PlayerData.get_instance().unlock_achievement("mount_%s" % mount_id)
+	PlayerData.instance.unlock_achievement("mount_%s" % mount_id)
 
 func _unlock_effect(effect_id: String):
-	PlayerData.get_instance().unlock_achievement("effect_%s" % effect_id)
+	PlayerData.instance.unlock_achievement("effect_%s" % effect_id)
 
 func _unlock_pet(pet_id: String):
-	PlayerData.get_instance().unlock_achievement("pet_%s" % pet_id)
+	PlayerData.instance.unlock_achievement("pet_%s" % pet_id)
 
 func get_season_remaining_time() -> int:
 	var now = Time.get_unix_time_from_system()
@@ -277,11 +297,11 @@ func get_season_info() -> Dictionary:
 		"season": current_season,
 		"end_time": season_end_time,
 		"remaining_time": get_season_remaining_time(),
-		"rank": PlayerData.get_instance().pvp_rank,
-		"rank_score": PlayerData.get_instance().pvp_rank_score,
-		"wins": PlayerData.get_instance().pvp_wins,
-		"losses": PlayerData.get_instance().pvp_losses,
-		"weekly_wins": PlayerData.get_instance().pvp_weekly_wins
+		"rank": PlayerData.instance.pvp_rank,
+		"rank_score": PlayerData.instance.pvp_rank_score,
+		"wins": PlayerData.instance.pvp_wins,
+		"losses": PlayerData.instance.pvp_losses,
+		"weekly_wins": PlayerData.instance.pvp_weekly_wins
 	}
 
 func get_match_history(limit: int = 20) -> Array[PvPMatch]:
@@ -299,7 +319,7 @@ func to_dict() -> Dictionary:
 	return {
 		"current_season": current_season,
 		"season_end_time": season_end_time,
-		"match_history": [m.to_dict() for m in match_history],
+		"match_history": _match_history_to_dict(),
 		"matchmaking_queue": matchmaking_queue,
 		"is_searching": is_searching
 	}

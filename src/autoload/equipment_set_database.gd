@@ -3,7 +3,10 @@ class_name EquipmentSetDatabase
 
 var equipment_sets: Dictionary = {}
 
-static var instance: EquipmentSetDatabase = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self

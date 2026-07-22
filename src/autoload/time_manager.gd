@@ -19,7 +19,10 @@ var weather: String = "晴"
 var weather_timer: int = 0
 var weather_duration: int = 10 * 60  # 10分钟
 
-static var instance: TimeManager = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self
@@ -65,11 +68,11 @@ func _update_day_cycle(delta: float):
 	current_second = total_seconds % 60
 
 func _on_day_changed():
-	EventManager.get_instance().emit("day_changed", get_game_date())
+	EventManager.instance.emit("day_changed", get_game_date())
 	
 	# 每天重置每日任务等
-	if PlayerData.get_instance():
-		PlayerData.get_instance().daily_login()
+	if PlayerData.instance:
+		PlayerData.instance.daily_login()
 
 func _update_season(delta: float):
 	season_progress += delta / season_duration
@@ -81,7 +84,7 @@ func _cycle_season():
 	var seasons = ["春", "夏", "秋", "冬"]
 	var idx = seasons.find(season)
 	season = seasons[(idx + 1) % 4]
-	EventManager.get_instance().emit("season_changed", season)
+	EventManager.instance.emit("season_changed", season)
 
 func _update_weather(delta: float):
 	weather_timer += int(delta)
@@ -106,7 +109,7 @@ func _change_weather():
 			var new_weather = weathers[i]
 			if new_weather != weather:
 				weather = new_weather
-				EventManager.get_instance().emit("weather_changed", weather)
+				EventManager.instance.emit("weather_changed", weather)
 			break
 
 func get_game_time() -> int:
@@ -199,7 +202,7 @@ func set_fixed_time(hour: int, minute: int = 0, second: int = 0):
 func advance_time(hours: float = 1.0):
 	add_game_time(int(hours * 3600))
 
-def get_time_until(hour: int, minute: int = 0) -> int:
+func get_time_until(hour: int, minute: int = 0) -> int:
 	var target = hour * 3600 + minute * 60
 	var current = current_hour * 3600 + current_minute * 60 + current_second
 	var diff = target - current

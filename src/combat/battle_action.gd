@@ -3,10 +3,10 @@ class_name BattleAction
 
 @export var action_id: String
 @export var action_type: String = ""
-@export var actor: BattleCharacter = null
-@export var target: BattleCharacter = null
-@export var targets: Array[BattleCharacter] = []
-@export var skill: WuxueData = null
+var actor: BattleCharacter = null
+var target: BattleCharacter = null
+var targets: Array[BattleCharacter] = []
+var skill: WuxueData = null
 @export var target_position: Vector2i = Vector2i(-1, -1)
 @export var priority: int = 0
 @export var timestamp: int = 0
@@ -123,7 +123,7 @@ func execute(combat: CombatManager):
 		"连击":
 			if actor and actor.is_alive():
 				var combo_data = Combo.new().from_dict(metadata.get("combo_data", {}))
-				combat.combo_system.execute_combo_step(actor, combo_data, combo_step)
+				combat.combo_system.execute_combo_step(actor, combo_data, combo_step, combat)
 
 func to_dict() -> Dictionary:
 	

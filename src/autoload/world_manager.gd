@@ -14,7 +14,10 @@ var weather: String = "晴"
 var season: String = "春"
 var rng: RandomNumberGenerator
 
-static var instance: WorldManager = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self
@@ -122,7 +125,7 @@ func _create_areas():
 	areas[area.id] = area
 	
 	# 门派地图
-	for sect in SectDatabase.get_instance().get_all_sects():
+	for sect in SectDatabase.instance.get_all_sects():
 		area = WorldArea.new()
 		area.id = "sect_%s" % sect.id
 		area.name = sect.name
@@ -286,7 +289,7 @@ func travel_to(area_id: String) -> bool:
 	
 	area_progress[area_id] = area_progress.get(area_id, 0) + 1
 	
-	EventManager.get_instance().emit("area_changed", area_id)
+	EventManager.instance.emit("area_changed", area_id)
 	return true
 
 func get_area_npcs(area_id: String) -> Array[NPCData]:
@@ -295,7 +298,7 @@ func get_area_npcs(area_id: String) -> Array[NPCData]:
 		return []
 	var result = []
 	for npc_id in area.npcs:
-		var npc = StoryDatabase.get_instance().get_npc(npc_id)
+		var npc = StoryDatabase.instance.get_npc(npc_id)
 		if npc:
 			result.append(npc)
 	return result
@@ -312,7 +315,7 @@ func get_area_events(area_id: String) -> Array[WorldEvent]:
 		return []
 	var result = []
 	for event_id in area.events:
-		var evt = StoryDatabase.get_instance().get_world_event(event_id)
+		var evt = StoryDatabase.instance.get_world_event(event_id)
 		if evt:
 			result.append(evt)
 	return result
@@ -326,7 +329,7 @@ func discover_secret_location(area_id: String, location_id: String) -> bool:
 			area_progress["secrets"] = []
 		if location_id not in area_progress["secrets"]:
 			area_progress["secrets"].append(location_id)
-			EventManager.get_instance().emit("secret_discovered", area_id, location_id)
+			EventManager.instance.emit("secret_discovered", area_id, location_id)
 			return true
 	return false
 

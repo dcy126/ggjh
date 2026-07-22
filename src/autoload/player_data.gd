@@ -66,7 +66,10 @@ var achievements: Dictionary = {}
 
 var settings: Dictionary = {}
 
-static var instance: PlayerData = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self
@@ -101,7 +104,7 @@ func create_new_player(name: String, face_data: FaceData = null, body_data: Body
 	gold = 0
 	
 	# 创建主角
-	var char_db = CharacterDatabase.get_instance()
+	var char_db = CharacterDatabase.instance
 	protagonist = char_db.get_protagonist().duplicate()
 	protagonist.potential_level = 1
 	protagonist.potential_exp = 0
@@ -160,7 +163,7 @@ func create_new_player(name: String, face_data: FaceData = null, body_data: Body
 	weekly_tasks_completed = []
 	achievements = {}
 	
-	EventManager.get_instance().emit("player_created", player_id)
+	EventManager.instance.emit("player_created", player_id)
 
 func gain_exp(amount: int):
 	exp += amount
@@ -177,48 +180,48 @@ func level_up():
 		protagonist.potential_level += 1
 		protagonist.potential_exp += 100
 	
-	EventManager.get_instance().emit("player_level_up", level)
+	EventManager.instance.emit("player_level_up", level)
 
 func gain_copper(amount: int):
 	copper += amount
-	EventManager.get_instance().emit("currency_changed", "copper", copper)
+	EventManager.instance.emit("currency_changed", "copper", copper)
 
 func spend_copper(amount: int) -> bool:
 	if copper >= amount:
 		copper -= amount
-		EventManager.get_instance().emit("currency_changed", "copper", copper)
+		EventManager.instance.emit("currency_changed", "copper", copper)
 		return true
 	return false
 
 func gain_gold(amount: int):
 	gold += amount
-	EventManager.get_instance().emit("currency_changed", "gold", gold)
+	EventManager.instance.emit("currency_changed", "gold", gold)
 
 func spend_gold(amount: int) -> bool:
 	if gold >= amount:
 		gold -= amount
-		EventManager.get_instance().emit("currency_changed", "gold", gold)
+		EventManager.instance.emit("currency_changed", "gold", gold)
 		return true
 	return false
 
 func add_companion(character: CharacterData):
 	if character not in companions:
 		companions.append(character)
-		EventManager.get_instance().emit("companion_added", character.id)
+		EventManager.instance.emit("companion_added", character.id)
 
 func remove_companion(character_id: String):
 	companions.erase(character_id)
 	if character_id in formation:
 		formation.erase(character_id)
-	EventManager.get_instance().emit("companion_removed", character_id)
+	EventManager.instance.emit("companion_removed", character_id)
 
 func set_formation(new_formation: Array[String]):
 	formation = new_formation
-	EventManager.get_instance().emit("formation_changed", formation)
+	EventManager.instance.emit("formation_changed", formation)
 
 func add_item(item_id: String, count: int = 1):
 	inventory[item_id] = inventory.get(item_id, 0) + count
-	EventManager.get_instance().emit("item_added", item_id, count)
+	EventManager.instance.emit("item_added", item_id, count)
 
 func remove_item(item_id: String, count: int = 1) -> bool:
 	var current = inventory.get(item_id, 0)
@@ -226,7 +229,7 @@ func remove_item(item_id: String, count: int = 1) -> bool:
 		inventory[item_id] = current - count
 		if inventory[item_id] <= 0:
 			inventory.erase(item_id)
-		EventManager.get_instance().emit("item_removed", item_id, count)
+		EventManager.instance.emit("item_removed", item_id, count)
 		return true
 	return false
 
@@ -235,27 +238,29 @@ func has_item(item_id: String, count: int = 1) -> bool:
 
 func add_equipment(equipment: EquipmentData):
 	equipment_inventory.append(equipment)
-	EventManager.get_instance().emit("equipment_added", equipment.id)
+	EventManager.instance.emit("equipment_added", equipment.id)
 
 func remove_equipment(equipment_id: String) -> EquipmentData:
 	for i in range(equipment_inventory.size()):
 		if equipment_inventory[i].id == equipment_id:
-			return equipment_inventory.remove_at(i)
+			var item = equipment_inventory[i]
+			equipment_inventory.remove_at(i)
+			return item
 	return null
 
 func add_wuxue(wuxue: WuxueData):
 	if wuxue not in wuxue_inventory:
 		wuxue_inventory.append(wuxue)
-		EventManager.get_instance().emit("wuxue_learned", wuxue.id)
+		EventManager.instance.emit("wuxue_learned", wuxue.id)
 
 func add_xinfa(xinfa: XinfaData):
 	if xinfa not in xinfa_inventory:
 		xinfa_inventory.append(xinfa)
-		EventManager.get_instance().emit("xinfa_obtained", xinfa.id)
+		EventManager.instance.emit("xinfa_obtained", xinfa.id)
 
 func add_material(material_id: String, count: int = 1):
 	material_inventory[material_id] = material_inventory.get(material_id, 0) + count
-	EventManager.get_instance().emit("material_added", material_id, count)
+	EventManager.instance.emit("material_added", material_id, count)
 
 func learn_recipe(recipe_id: String):
 	if recipe_id not in known_recipes:
@@ -267,36 +272,36 @@ func complete_quest(quest_id: String):
 		
 	# 从活跃任务中移除
 	for i in range(active_quests.size()):
-			if active_quests[i].id == quest_id:
+		if active_quests[i].id == quest_id:
 			active_quests.remove_at(i)
 			break
 	
-	EventManager.get_instance().emit("quest_completed", quest_id)
+	EventManager.instance.emit("quest_completed", quest_id)
 
 func accept_quest(quest: Quest):
 	if quest not in active_quests:
 		active_quests.append(quest)
-		EventManager.get_instance().emit("quest_accepted", quest.id)
+		EventManager.instance.emit("quest_accepted", quest.id)
 
 func make_story_choice(choice_id: String, result: Dictionary):
 	story_choices[choice_id] = result
-	EventManager.get_instance().emit("story_choice_made", choice_id, result)
+	EventManager.instance.emit("story_choice_made", choice_id, result)
 
 func complete_chapter(chapter: int):
 	if chapter not in completed_chapters:
 		completed_chapters.append(chapter)
 		if chapter >= current_chapter:
 			current_chapter = chapter + 1
-		EventManager.get_instance().emit("chapter_completed", chapter)
+		EventManager.instance.emit("chapter_completed", chapter)
 
 func unlock_area(area_id: String):
 	if area_id not in unlocked_areas:
 		unlocked_areas.append(area_id)
-		EventManager.get_instance().emit("area_unlocked", area_id)
+		EventManager.instance.emit("area_unlocked", area_id)
 
 func set_current_area(area_id: String):
 	current_area = area_id
-	WorldManager.get_instance().travel_to(area_id)
+	WorldManager.instance.travel_to(area_id)
 
 func record_visit(location_id: String):
 	visited_locations[location_id] = {"count": visited_locations.get(location_id, {"count": 0})["count"] + 1, "last_visit": Time.get_unix_time_from_system()}
@@ -310,7 +315,7 @@ func update_pvp_result(win: bool, score_change: int):
 	
 	pvp_rank_score = max(0, pvp_rank_score + score_change)
 	_update_pvp_rank()
-	EventManager.get_instance().emit("pvp_result", win, pvp_rank_score)
+	EventManager.instance.emit("pvp_result", win, pvp_rank_score)
 
 func _update_pvp_rank():
 	var ranks = ["青铜", "白银", "黄金", "铂金", "钻石", "大师", "宗师", "王者", "传说"]
@@ -323,25 +328,25 @@ func _update_pvp_rank():
 
 func reset_weekly_pvp():
 	pvp_weekly_wins = 0
-	EventManager.get_instance().emit("pvp_weekly_reset")
+	EventManager.instance.emit("pvp_weekly_reset")
 
 func add_guild_contribution(amount: int):
 	guild_contribution += amount
-	EventManager.get_instance().emit("guild_contribution_changed", guild_contribution)
+	EventManager.instance.emit("guild_contribution_changed", guild_contribution)
 
 func add_sect_contribution(amount: int):
 	sect_contribution += amount
-	EventManager.get_instance().emit("sect_contribution_changed", sect_contribution)
+	EventManager.instance.emit("sect_contribution_changed", sect_contribution)
 
 func set_guild(guild_id: String, position: String = "成员"):
 	current_guild = guild_id
 	guild_position = position
-	EventManager.get_instance().emit("guild_joined", guild_id, position)
+	EventManager.instance.emit("guild_joined", guild_id, position)
 
 func leave_guild():
 	current_guild = ""
 	guild_position = ""
-	EventManager.get_instance().emit("guild_left")
+	EventManager.instance.emit("guild_left")
 
 func set_sect(sect_id: String):
 	current_sect = sect_id
@@ -349,7 +354,7 @@ func set_sect(sect_id: String):
 	sect_contribution = 0
 	if protagonist:
 		protagonist.current_sect = sect_id
-	EventManager.get_instance().emit("sect_joined", sect_id)
+	EventManager.instance.emit("sect_joined", sect_id)
 
 func leave_sect():
 	current_sect = ""
@@ -357,7 +362,7 @@ func leave_sect():
 	sect_contribution = 0
 	if protagonist:
 		protagonist.current_sect = ""
-	EventManager.get_instance().emit("sect_left")
+	EventManager.instance.emit("sect_left")
 
 func update_play_time(delta: int):
 	play_time += delta
@@ -371,10 +376,10 @@ func daily_login():
 		login_days += 1
 		last_login_time = now
 		daily_tasks_completed = []
-		EventManager.get_instance().emit("daily_reset")
+		EventManager.instance.emit("daily_reset")
 	elif now - last >= 604800:  # 跨周
 		weekly_tasks_completed = []
-		EventManager.get_instance().emit("weekly_reset")
+		EventManager.instance.emit("weekly_reset")
 
 func complete_daily_task(task_id: String):
 	if task_id not in daily_tasks_completed:
@@ -387,7 +392,7 @@ func complete_weekly_task(task_id: String):
 func unlock_achievement(achievement_id: String):
 	if achievement_id not in achievements:
 		achievements[achievement_id] = {"unlocked_time": Time.get_unix_time_from_system(), "progress": 100}
-		EventManager.get_instance().emit("achievement_unlocked", achievement_id)
+		EventManager.instance.emit("achievement_unlocked", achievement_id)
 
 func update_achievement_progress(achievement_id: String, progress: int):
 	if achievement_id in achievements:
@@ -400,7 +405,7 @@ func get_setting(key: String, default = null):
 
 func set_setting(key: String, value):
 	settings[key] = value
-	EventManager.get_instance().emit("setting_changed", key, value)
+	EventManager.instance.emit("setting_changed", key, value)
 	_save_settings()
 
 func _save_settings():
@@ -429,14 +434,14 @@ func to_dict() -> Dictionary:
 		"current_guild": current_guild,
 		"guild_position": guild_position,
 		"protagonist": protagonist.to_dict() if protagonist else {},
-		"companions": [c.to_dict() for c in companions],
+		"companions": _companions_to_dict(),
 		"formation": formation,
 		"formation_name": formation_name,
 		"inventory": inventory,
 		"material_inventory": material_inventory,
 		"known_recipes": known_recipes,
 		"completed_quests": completed_quests,
-		"active_quests": [q.id for q in active_quests],
+		"active_quests": _active_quests_to_dict(),
 		"completed_chapters": completed_chapters,
 		"current_chapter": current_chapter,
 		"story_choices": story_choices,
@@ -454,6 +459,18 @@ func to_dict() -> Dictionary:
 		"settings": settings,
 		"character_customization": character_customization.to_dict() if character_customization else {}
 	}
+
+func _companions_to_dict() -> Array:
+	var result = []
+	for c in companions:
+		result.append(c.to_dict())
+	return result
+
+func _active_quests_to_dict() -> Array:
+	var result = []
+	for q in active_quests:
+		result.append(q.id)
+	return result
 
 func from_dict(data: Dictionary):
 	player_id = data.get("player_id", "")
@@ -489,7 +506,7 @@ func from_dict(data: Dictionary):
 	completed_quests = data.get("completed_quests", [])
 	active_quests = []
 	for q_id in data.get("active_quests", []):
-		var q = StoryDatabase.get_instance().get_quest(q_id)
+		var q = StoryDatabase.instance.get_quest(q_id)
 		if q:
 			active_quests.append(q)
 	completed_chapters = data.get("completed_chapters", [])

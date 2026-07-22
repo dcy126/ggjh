@@ -8,9 +8,15 @@ static var characters_by_role: Dictionary = {}
 static var recruitable_characters: Array[CharacterData] = []
 static var protagonist: CharacterData = null
 
+static var instance = null
+
+static func get_instance():
+	return instance
+
 var rng: RandomNumberGenerator = null
 
 func _enter_tree():
+	instance = self
 	rng = RandomNumberGenerator.new()
 	rng.randomize()
 	_load_all_characters()

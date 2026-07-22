@@ -68,7 +68,7 @@ func add_ranking_entry(player_id: String, score: int, data: Dictionary = {}):
 		"data": data,
 		"time": Time.get_unix_time_from_system()
 	})
-	ranking.sort_custom(self, "_compare_score")
+	ranking.sort_custom(_compare_score)
 
 func _compare_score(a: Dictionary, b: Dictionary) -> int:
 	return -1 if a["score"] > b["score"] else 1

@@ -44,7 +44,8 @@ func can_trigger(defender: BattleCharacter, attacker: BattleCharacter, damage: i
 		if not _check_condition(cond, defender, attacker, damage, damage_type, is_crit):
 			return false
 	
-	if rng.randf_range(0.0, 1.0) > trigger_chance:
+	var _rng = RandomNumberGenerator.new()
+	if _rng.randf_range(0.0, 1.0) > trigger_chance:
 		return false
 	
 	return true
@@ -86,22 +87,17 @@ func _check_condition(cond: Dictionary, defender: BattleCharacter, attacker: Bat
 			return attacker.grid_pos.distance_to(defender.grid_pos) > 1
 	return true
 
-func execute(defender: BattleCharacter, attacker: BattleCharacter, damage: int, damage_type: String, is_crit: bool):
+func execute(defender: BattleCharacter, attacker: BattleCharacter, damage: int, damage_type: String, is_crit: bool, combat: CombatManager = null):
 	if not can_trigger(defender, attacker, damage, damage_type, is_crit):
 		return
 	
 	defender.counter_count += 1
 	current_cooldown = cooldown
 	
-	log("%s 触发了 %s！" % [defender.character_name, name])
-	
 	for effect in counter_effects:
-		_apply_counter_effect(effect, defender, attacker, damage)
-	
-	if on_counter_executed:
-		on_counter_executed.call(defender, attacker, self)
+		_apply_counter_effect(effect, defender, attacker, damage, combat)
 
-func _apply_counter_effect(effect: Dictionary, defender: BattleCharacter, attacker: BattleCharacter, original_damage: int):
+func _apply_counter_effect(effect: Dictionary, defender: BattleCharacter, attacker: BattleCharacter, original_damage: int, combat: CombatManager = null):
 	var effect_type = effect.get("type", "")
 	match effect_type:
 		"反击伤害":
@@ -124,44 +120,48 @@ func _apply_counter_effect(effect: Dictionary, defender: BattleCharacter, attack
 			se.trigger = "常驻"
 			attacker.apply_status_effect(se)
 		"反击清除状态":
-			attacker.clear_debuffs(effect.get("count", 1))
+			attacker.clear_debuffs()
 		"反击位移":
-			var dir = (defender.grid_pos - attacker.grid_pos).sign()
-			var distance = effect.get("distance", 1)
-			var new_pos = attacker.grid_pos + dir * distance
-			if battle_grid and battle_grid.is_valid_position(new_pos) and battle_grid.is_walkable(new_pos):
-				battle_grid.move_character(attacker, new_pos)
+			if combat and combat.battle_grid:
+				var dir = (defender.grid_pos - attacker.grid_pos).sign()
+				var distance = effect.get("distance", 1)
+				var new_pos = attacker.grid_pos + dir * distance
+				if combat.battle_grid.is_valid_position(new_pos) and combat.battle_grid.is_walkable(new_pos):
+					combat.battle_grid.move_character(attacker, new_pos)
 		"反击追击":
-			# 触发额外攻击
-			if effect.get("use_basic_attack", true):
-				execute_basic_attack(defender, attacker)
-			else:
-				var skill_id = effect.get("skill_id", "")
-				if skill_id:
-					var skill = WuxueDatabase.get_wuxue(skill_id)
-					if skill:
-						combat_manager.execute_skill(defender, attacker, skill)
+			if combat:
+				if effect.get("use_basic_attack", true):
+					combat.execute_basic_attack(defender, attacker)
+				else:
+					var skill_id = effect.get("skill_id", "")
+					if skill_id:
+						var skill = WuxueDatabase.instance.get_wuxue(skill_id)
+						if skill:
+							combat.execute_skill(defender, attacker, skill)
 		"反击协同":
-			# 触发队友协同
-			for ally in get_allies(defender.team):
-				if ally != defender and ally.is_alive():
-					var chance = effect.get("ally_chance", 0.5)
-					if rng.randf_range(0.0, 1.0) < chance:
-						if effect.get("ally_action", "attack") == "attack":
-							execute_basic_attack(ally, attacker)
-						else:
-							var skill_id = effect.get("ally_skill", "")
-							if skill_id:
-								var skill = WuxueDatabase.get_wuxue(skill_id)
-								if skill:
-									combat_manager.execute_skill(ally, attacker, skill)
+			if combat:
+				for ally in combat.get_allies(defender.team):
+					if ally != defender and ally.is_alive():
+						var chance = effect.get("ally_chance", 0.5)
+						var rng = RandomNumberGenerator.new()
+						if rng.randf_range(0.0, 1.0) < chance:
+							if effect.get("ally_action", "attack") == "attack":
+								combat.execute_basic_attack(ally, attacker)
+							else:
+								var skill_id = effect.get("ally_skill", "")
+								if skill_id:
+									var skill = WuxueDatabase.instance.get_wuxue(skill_id)
+									if skill:
+										combat.execute_skill(ally, attacker, skill)
 		"反击变身":
 			defender.current_form = effect.get("form_id", "")
 			defender.form_data = effect.get("form_data", {})
 		"反击分身":
-			combat_manager.summon_phantom(defender, effect.get("count", 1), effect.get("duration", 2))
+			if combat:
+				combat.summon_phantom(defender, effect.get("count", 1), effect.get("duration", 2))
 		"反击召唤":
-			combat_manager.summon_unit(defender.team, effect.get("summon_id", ""), defender.grid_pos, effect.get("duration", 3))
+			if combat:
+				combat.summon_unit(defender.team, effect.get("summon_id", ""), defender.grid_pos, effect.get("duration", 3))
 
 func reduce_cooldown():
 	if current_cooldown > 0:

@@ -39,7 +39,7 @@ var on_heal_done: Callable
 var on_status_applied: Callable 
 var on_character_death: Callable 
 
-static var instance: CombatManager = null
+static var instance = null
 
 func _enter_tree():
 	instance = self
@@ -214,6 +214,24 @@ func _process_character_wait(char: BattleCharacter):
 	var mp_regen = max(1, int(char.max_mp * 0.05))
 	char.current_mp = min(char.current_mp + mp_regen, char.max_mp)
 
+func _wait_for_player_input(char: BattleCharacter):
+	_ai_act(char)
+
+func _execute_action(char: BattleCharacter, action: Dictionary):
+	var action_type = action.get("type", "")
+	match action_type:
+		"skill":
+			var skill_id = action.get("skill", "")
+			var target = action.get("target", null)
+			if skill_id and target:
+				var skill = WuxueDatabase.instance.get_wuxue(skill_id)
+				if skill:
+					execute_skill(char, target, skill)
+		"basic_attack":
+			var target = action.get("target", null)
+			if target:
+				execute_basic_attack(char, target)
+
 func _ai_act(char: BattleCharacter):
 	var action = _select_ai_action(char)
 	if action:
@@ -222,7 +240,7 @@ func _ai_act(char: BattleCharacter):
 func _select_ai_action(char: BattleCharacter) -> Dictionary:
 	var available_skills = []
 	for skill_id in char.equipped_wuxue:
-		var skill = WuxueDatabase.get_wuxue(skill_id)
+		var skill = WuxueDatabase.instance.get_wuxue(skill_id)
 		if skill and skill.can_use(char, self):
 			available_skills.append(skill_id)
 	
@@ -235,7 +253,7 @@ func _select_ai_action(char: BattleCharacter) -> Dictionary:
 	var best_target = null
 	
 	for skill_id in available_skills:
-		var skill = WuxueDatabase.get_wuxue(skill_id)
+		var skill = WuxueDatabase.instance.get_wuxue(skill_id)
 		var targets = _get_skill_targets(char, skill)
 		
 		for target in targets:
@@ -262,12 +280,12 @@ func _evaluate_skill(caster: BattleCharacter, skill: WuxueData, target: BattleCh
 			score *= 1.5
 	
 	if skill.base_heal > 0:
-		var heal = skill.get_heal_at_level(skill.current_level, caster.atk, caster.spd)
+		var heal = skill.get_heal_at_level(skill.current_level, caster.atk, caster.spd, caster.def)
 		var missing_hp = target.max_hp - target.current_hp
 		score += heal * (missing_hp / target.max_hp) * 0.2
 	
 	if skill.shield_amount > 0:
-		var shield = skill.get_shield_at_level(skill.current_level, caster.def)
+		var shield = skill.get_shield_at_level(skill.current_level, caster.atk, caster.def)
 		score += shield * 0.1
 	
 	for effect in skill.effects:
@@ -379,7 +397,7 @@ func execute_skill(caster: BattleCharacter, target: BattleCharacter, skill: Wuxu
 	
 	# 检查连击
 	if skill.is_combo_starter:
-		combo_system.start_combo(caster, skill)
+		combo_system.start_combo(caster, self)
 	
 	var targets = _get_aoe_targets(caster, target, skill)
 	
@@ -436,7 +454,7 @@ func _apply_skill_effect(caster: BattleCharacter, target: BattleCharacter, skill
 			on_damage_dealt.call(caster, target, actual_damage, skill.damage_type, is_crit)
 	
 	if skill.base_heal > 0:
-		heal = skill.get_heal_at_level(skill.current_level, caster.atk, caster.spd)
+		heal = skill.get_heal_at_level(skill.current_level, caster.atk, caster.spd, caster.def)
 		var actual_heal = target.heal(heal, caster)
 		caster.heal_done_this_turn += actual_heal
 		
@@ -446,7 +464,7 @@ func _apply_skill_effect(caster: BattleCharacter, target: BattleCharacter, skill
 			on_heal_done.call(caster, target, actual_heal)
 	
 	if skill.shield_amount > 0:
-		shield = skill.get_shield_at_level(skill.current_level, caster.def)
+		shield = skill.get_shield_at_level(skill.current_level, caster.atk, caster.def)
 		var sh = target.add_shield(shield, "技能", 2, caster)
 		caster.shield_gained_this_turn += shield
 		
@@ -625,7 +643,7 @@ func _end_battle():
 		on_battle_end.call(battle_result)
 
 func apply_formation_bonuses(formation_name: String):
-	var formation = FormationDatabase.get_formation(formation_name)
+	var formation = _get_formation_database().get_formation(formation_name)
 	if formation:
 		formation_system.apply(formation, player_team)
 		formation_system.apply(formation, enemy_team)
@@ -644,7 +662,7 @@ func schedule_effect(timestamp: int, caster: BattleCharacter, target: BattleChar
 	add_timestamp_callback(timestamp, Callable(self, "_trigger_delayed_effect").bind(caster, target, effect_id))
 
 func _trigger_delayed_effect(caster: BattleCharacter, target: BattleCharacter, effect_id: String):
-	var effect = EffectDatabase.get_effect(effect_id)
+	var effect = _get_effect_database().get_effect(effect_id)
 	if effect:
 		var se = StatusEffect.new()
 		se.effect_type = effect.type
@@ -707,14 +725,14 @@ func summon_phantom(caster: BattleCharacter, count: int, duration: int):
 			print("%s 召唤了幻影分身" % caster.character_name)
 
 func place_trap(team: int, pos: Vector2i, trap_type: String, duration: int):
-	battle_grid.add_trap(pos, trap_type)
+	battle_grid.add_trap(pos, trap_type, null)
 	print("%d 方在 (%d, %d) 放置了机关" % [team, pos.x, pos.y])
 
 func place_mine(team: int, pos: Vector2i, damage: int, duration: int):
-	battle_grid.add_mine(pos, damage)
+	battle_grid.add_mine(pos, str(damage), null)
 	print("%d 方在 (%d, %d) 埋设了地雷" % [team, pos.x, pos.y])
 
-static func get_instance() -> CombatManager:
+static func get_instance():
 	return instance
 
 func get_battle_state() -> Dictionary:
@@ -734,3 +752,9 @@ func get_battle_state() -> Dictionary:
 		"enemy_team": enemy_team_arr,
 		"log": battle_log
 	}
+
+func _get_formation_database():
+	return load("res://src/combat/formation_database.gd")
+
+func _get_effect_database():
+	return load("res://src/combat/effect_database.gd")

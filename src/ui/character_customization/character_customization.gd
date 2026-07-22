@@ -195,7 +195,7 @@ func _on_randomize_pressed():
 	current_customization.randomize_all()
 	_update_sliders_from_data()
 	_update_portrait()
-	name_input.text = current_customization.name
+	name_input.text = current_customization.character_name
 
 func _on_preset_pressed(preset: String):
 	if not current_customization:
@@ -204,7 +204,7 @@ func _on_preset_pressed(preset: String):
 	current_customization.apply_preset(preset)
 	_update_sliders_from_data()
 	_update_portrait()
-	name_input.text = current_customization.name
+	name_input.text = current_customization.character_name
 
 func _on_random_name_pressed():
 	if not current_customization:
@@ -215,9 +215,9 @@ func _on_confirm_pressed():
 	if not current_customization:
 		return
 	
-	current_customization.name = name_input.text
-	if current_customization.name == "":
-		current_customization.name = current_customization._generate_random_name()
+	current_customization.character_name = name_input.text
+	if current_customization.character_name == "":
+		current_customization.character_name = current_customization._generate_random_name()
 	
 	on_create_complete.emit(current_customization)
 	visible = false

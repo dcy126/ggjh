@@ -9,13 +9,16 @@ var guild_war_state: String = "休战期"
 var guild_war_match: String = ""
 var secret_realm_state: String = "未开启"
 
-static var instance: GuildManager = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self
 
 func create_guild(name: String, description: String, leader_id: String, leader_name: String, min_level: int = 1) -> bool:
-	var player_data = PlayerData.get_instance()
+	var player_data = PlayerData.instance
 	if player_data.player_id != leader_id:
 		return false
 	if player_data.gold < 100:
@@ -48,11 +51,11 @@ func create_guild(name: String, description: String, leader_id: String, leader_n
 	
 	player_data.set_guild(guild.guild_id, "帮主")
 	
-	EventManager.get_instance().emit("guild_created", guild.guild_id)
+	EventManager.instance.emit("guild_created", guild.guild_id)
 	return true
 
 func _calculate_player_power() -> int:
-	var protagonist = PlayerData.get_instance().protagonist
+	var protagonist = PlayerData.instance.protagonist
 	if not protagonist:
 		return 0
 	var bc = protagonist.get_battle_character()
@@ -89,18 +92,18 @@ func apply_to_guild(guild_id: String, player_id: String, player_name: String, pl
 	guild_applications[guild_id].append(application)
 	player_application = guild_id
 	
-	EventManager.get_instance().emit("guild_application_submitted", guild_id, player_id)
+	EventManager.instance.emit("guild_application_submitted", guild_id, player_id)
 	return true
 
 func cancel_application():
 	if player_application != "":
 		var apps = guild_applications.get(player_application, [])
 		for i in range(apps.size()):
-			if apps[i]["player_id"] == PlayerData.get_instance().player_id:
+			if apps[i]["player_id"] == PlayerData.instance.player_id:
 				apps.remove_at(i)
 				break
 		player_application = ""
-		EventManager.get_instance().emit("guild_application_cancelled")
+		EventManager.instance.emit("guild_application_cancelled")
 
 func approve_application(guild_id: String, approver_id: String, player_id: String) -> bool:
 	var guild = _find_guild(guild_id)
@@ -133,12 +136,12 @@ func approve_application(guild_id: String, approver_id: String, player_id: Strin
 	
 	guild.add_member(member)
 	
-	var player_data = PlayerData.get_instance()
+	var player_data = PlayerData.instance
 	if player_data.player_id == player_id:
 		player_data.set_guild(guild_id, "成员")
 		player_application = ""
 	
-	EventManager.get_instance().emit("guild_application_approved", guild_id, player_id)
+	EventManager.instance.emit("guild_application_approved", guild_id, player_id)
 	return true
 
 func reject_application(guild_id: String, approver_id: String, player_id: String) -> bool:
@@ -156,14 +159,14 @@ func reject_application(guild_id: String, approver_id: String, player_id: String
 			apps.remove_at(i)
 			break
 	
-	if PlayerData.get_instance().player_id == player_id:
+	if PlayerData.instance.player_id == player_id:
 		player_application = ""
 	
-	EventManager.get_instance().emit("guild_application_rejected", guild_id, player_id)
+	EventManager.instance.emit("guild_application_rejected", guild_id, player_id)
 	return true
 
 func leave_guild(player_id: String) -> bool:
-	if not current_guild or current_guild.guild_id != PlayerData.get_instance().current_guild:
+	if not current_guild or current_guild.guild_id != PlayerData.instance.current_guild:
 		return false
 	
 	var is_leader = current_guild.leader_id == player_id
@@ -171,12 +174,12 @@ func leave_guild(player_id: String) -> bool:
 		return false  # 帮主不能直接退出，需转让
 	
 	current_guild.remove_member(player_id)
-	PlayerData.get_instance().leave_guild()
+	PlayerData.instance.leave_guild()
 	
 	if is_leader:
 		_transfer_leadership()
 	
-	EventManager.get_instance().emit("guild_left", player_id)
+	EventManager.instance.emit("guild_left", player_id)
 	return true
 
 func _transfer_leadership():
@@ -198,20 +201,20 @@ func _transfer_leadership():
 	if candidates.is_empty():
 		candidates = current_guild.members.duplicate()
 	
-	candidates.sort_custom(self, "_compare_contribution")
+	candidates.sort_custom(_compare_contribution)
 	var new_leader = candidates[0]
 	current_guild.leader_id = new_leader.player_id
 	new_leader.position = "帮主"
 	
-	EventManager.get_instance().emit("guild_leadership_transferred", current_guild.guild_id, new_leader.player_id)
+	EventManager.instance.emit("guild_leadership_transferred", current_guild.guild_id, new_leader.player_id)
 
 func _compare_contribution(a: GuildMember, b: GuildMember) -> int:
 	return -1 if a.total_contribution > b.total_contribution else 1
 
 func _disband_guild():
 	guild_list.erase(current_guild)
-	current_guild = nil
-	EventManager.get_instance().emit("guild_disbanded")
+	current_guild = null
+	EventManager.instance.emit("guild_disbanded")
 
 func kick_member(kicker_id: String, target_id: String) -> bool:
 	if not current_guild:
@@ -226,7 +229,7 @@ func promote_member(promoter_id: String, target_id: String, new_position: String
 func donate(copper: int, gold: int = 0) -> bool:
 	if not current_guild:
 		return false
-	return current_guild.donate(PlayerData.get_instance().player_id, copper, gold)
+	return current_guild.donate(PlayerData.instance.player_id, copper, gold)
 
 func upgrade_building(building_name: String) -> bool:
 	if not current_guild:
@@ -264,7 +267,7 @@ func get_all_guilds() -> Array[Guild]:
 
 func get_recommended_guilds(count: int = 10) -> Array[Guild]:
 	var sorted = guild_list.duplicate()
-	sorted.sort_custom(self, "_compare_guild_activity")
+	sorted.sort_custom(_compare_guild_activity)
 	return sorted.slice(0, min(count, sorted.size()))
 
 func _compare_guild_activity(a: Guild, b: Guild) -> int:
@@ -304,7 +307,7 @@ func start_guild_war(opponent_guild_id: String) -> bool:
 	
 	guild_war_state = "宣战中"
 	guild_war_match = opponent_guild_id
-	EventManager.get_instance().emit("guild_war_declared", current_guild.guild_id, opponent_guild_id)
+	EventManager.instance.emit("guild_war_declared", current_guild.guild_id, opponent_guild_id)
 	return true
 
 func accept_guild_war(challenger_guild_id: String) -> bool:
@@ -314,7 +317,7 @@ func accept_guild_war(challenger_guild_id: String) -> bool:
 		return false
 	
 	guild_war_state = "战斗中"
-	EventManager.get_instance().emit("guild_war_started", current_guild.guild_id, challenger_guild_id)
+	EventManager.instance.emit("guild_war_started", current_guild.guild_id, challenger_guild_id)
 	return true
 
 func end_guild_war(winner_guild_id: String):
@@ -330,7 +333,7 @@ func end_guild_war(winner_guild_id: String):
 	
 	guild_war_state = "休战期"
 	guild_war_match = ""
-	EventManager.get_instance().emit("guild_war_ended", winner_guild_id)
+	EventManager.instance.emit("guild_war_ended", winner_guild_id)
 
 func get_guild_shop_items() -> Array[Dictionary]:
 	if not current_guild:
@@ -374,7 +377,7 @@ func buy_from_guild_shop(item_id: String, count: int = 1) -> bool:
 	var total_price = shop_item["price"] * count
 	var currency = shop_item["currency"]
 	
-	var member = current_guild.get_member(PlayerData.get_instance().player_id)
+	var member = current_guild.get_member(PlayerData.instance.player_id)
 	if not member:
 		return false
 	
@@ -386,20 +389,26 @@ func buy_from_guild_shop(item_id: String, count: int = 1) -> bool:
 		# 其他货币
 		return false
 	
-	PlayerData.get_instance().add_item(item_id, count)
-	EventManager.get_instance().emit("guild_shop_purchase", current_guild.guild_id, item_id, count)
+	PlayerData.instance.add_item(item_id, count)
+	EventManager.instance.emit("guild_shop_purchase", current_guild.guild_id, item_id, count)
 	return true
 
 func to_dict() -> Dictionary:
 	return {
 		"current_guild": current_guild.to_dict() if current_guild else {},
-		"guild_list": [g.to_dict() for g in guild_list],
+		"guild_list": _guild_list_to_dict(),
 		"guild_applications": guild_applications,
 		"player_application": player_application,
 		"guild_war_state": guild_war_state,
 		"guild_war_match": guild_war_match,
 		"secret_realm_state": secret_realm_state
 	}
+
+func _guild_list_to_dict() -> Array:
+	var result = []
+	for g in guild_list:
+		result.append(g.to_dict())
+	return result
 
 func from_dict(data: Dictionary):
 	if data.has("current_guild") and data["current_guild"]:

@@ -8,7 +8,10 @@ var xinfa_by_quality: Dictionary = {}
 var xinfa_sets: Dictionary = {}
 var rng: RandomNumberGenerator
 
-static var instance: XinfaDatabase = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self

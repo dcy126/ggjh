@@ -27,7 +27,10 @@ var notification_ui: Control = null
 var tooltip_ui: Control = null
 var context_menu_ui: Control = null
 
-static var instance: UIManager = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 signal ui_opened(ui_name: String)
 signal ui_closed(ui_name: String)
@@ -63,7 +66,7 @@ func open_ui(ui_name: String) -> Control:
 	_play_open_animation(ui)
 	
 	ui_opened.emit(ui_name)
-	EventManager.get_instance().emit("ui_opened", ui_name)
+	EventManager.instance.emit("ui_opened", ui_name)
 	
 	return ui
 
@@ -81,7 +84,7 @@ func _on_ui_close_finished(ui_name: String):
 		ui.visible = false
 		ui_stack.erase(ui)
 		ui_closed.emit(ui_name)
-		EventManager.get_instance().emit("ui_closed", ui_name)
+		EventManager.instance.emit("ui_closed", ui_name)
 
 func close_top_ui() -> bool:
 	if ui_stack.is_empty():

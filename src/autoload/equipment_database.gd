@@ -8,7 +8,10 @@ var equipment_by_type: Dictionary = {}
 var equipment_sets: Dictionary = {}
 var gem_list: Dictionary = {}
 
-static var instance: EquipmentDatabase = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self

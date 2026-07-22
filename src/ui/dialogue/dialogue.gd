@@ -67,10 +67,9 @@ func _start_typewriter():
 	var tween = create_tween()
 	tween.set_parallel(false)
 	
-	var chars = full_text.to_char_array()
-	for i in range(chars.size()):
-		var char = chars[i]
-		tween.tween_callback(_append_char.bind(char))
+	for i in range(full_text.length()):
+		var ch = full_text[i]
+		tween.tween_callback(_append_char.bind(ch))
 		tween.tween_interval(1.0 / typewriter_speed)
 	
 	tween.tween_callback(_on_typewriter_finished)
@@ -195,7 +194,7 @@ func _on_next_pressed():
 
 func _on_auto_pressed():
 	is_auto = not is_auto
-	auto_btn.text = "自动: %s" % [is_auto ? "开" : "关"]
+	auto_btn.text = "自动: 开" if is_auto else "自动: 关"
 
 func _on_skip_pressed():
 	_hide_dialogue()

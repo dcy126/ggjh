@@ -4,8 +4,8 @@ class_name PvPMatch
 @export var match_id: String
 @export var player1_id: String
 @export var player2_id: String
-@export var player1_team: Array[BattleCharacter] = []
-@export var player2_team: Array[BattleCharacter] = []
+var player1_team: Array[BattleCharacter] = []
+var player2_team: Array[BattleCharacter] = []
 @export var mode: String = "ranked"
 @export var start_time: int = 0
 @export var end_time: int = 0

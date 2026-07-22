@@ -7,7 +7,10 @@ var sect_wuxue: Dictionary = {}
 var disciple_talents: Dictionary = {}
 var contribution_rewards: Dictionary = {}
 
-static var instance: SectDatabase = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self

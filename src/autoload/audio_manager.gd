@@ -13,7 +13,10 @@ var is_fading: bool = false
 var bgm_library: Dictionary = {}
 var sfx_library: Dictionary = {}
 
-static var instance: AudioManager = null
+static var instance = null
+
+static func get_instance():
+	return instance
 
 func _enter_tree():
 	instance = self
@@ -214,7 +217,7 @@ func _update_all_volumes():
 func linear_to_db(linear: float) -> float:
 	if linear <= 0.0:
 		return -80.0
-	return 20.0 * log10(linear)
+	return 20.0 * log(linear) / log(10.0)
 
 func get_current_bgm() -> String:
 	return current_bgm
@@ -236,11 +239,11 @@ func seek_bgm(position: float):
 
 func preload_bgm(bgm_name: String):
 	if bgm_library.has(bgm_name):
-		load_thread(bgm_library[bgm_name])
+		ResourceLoader.load_threaded_request(bgm_library[bgm_name])
 
 func preload_sfx(sfx_name: String):
 	if sfx_library.has(sfx_name):
-		load_thread(sfx_library[sfx_name])
+		ResourceLoader.load_threaded_request(sfx_library[sfx_name])
 
 func to_dict() -> Dictionary:
 	return {

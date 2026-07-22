@@ -1,27 +1,14 @@
-extends Resource
+extends BattleCharacter
 class_name Pet
 
 @export var pet_id: String
-@export var name: String = ""
-@export var max_hp: int = 1000
-@export var current_hp: int = 1000
-@export var atk: int = 50
-@export var def: int = 20
-@export var spd: int = 50
-@export var hit: int = 50
-@export var dodge: int = 20
-@export var crit: int = 20
-@export var crit_dmg: float = 1.5
-@export var team: int = 0
-@export var grid_pos: Vector2i = Vector2i(-1, -1)
 @export var loyalty: int = 100
-@export var level: int = 1
 @export var exp: int = 0
 @export var skills: Array[String] = []
 @export var ai_behavior: String = "follow_owner"
 @export var formation_offset: Vector2i = Vector2i(1, 0)
 @export var tags: Array[String] = []
-@export var owner: BattleCharacter = null
+var master: BattleCharacter = null
 @export var prioritize_ultimate: bool = true
 
 func _init():
@@ -31,7 +18,7 @@ func _init():
 		skills = []
 
 func initialize(pet_data: Dictionary, owner_char: BattleCharacter):
-	owner = owner_char
+	master = owner_char
 	pet_id = pet_data.get("id", "")
 	name = pet_data.get("name", "")
 	max_hp = pet_data.get("hp", 1000)
@@ -43,7 +30,7 @@ func initialize(pet_data: Dictionary, owner_char: BattleCharacter):
 	dodge = pet_data.get("dodge", 20)
 	crit = pet_data.get("crit", 20)
 	crit_dmg = pet_data.get("crit_dmg", 1.5)
-	team = owner.team
+	team = master.team
 	skills = pet_data.get("skills", [])
 	ai_behavior = pet_data.get("ai", "follow_owner")
 	formation_offset = Vector2i(pet_data.get("offset_x", 1), pet_data.get("offset_y", 0))
@@ -51,7 +38,7 @@ func initialize(pet_data: Dictionary, owner_char: BattleCharacter):
 	level = 1
 	exp = 0
 
-func take_damage(amount: int, damage_type: String, source: BattleCharacter) -> int:
+func take_damage(amount: int, damage_type: String, source: BattleCharacter, is_crit: bool = false) -> int:
 	if current_hp <= 0:
 		return 0
 	
@@ -68,15 +55,15 @@ func take_damage(amount: int, damage_type: String, source: BattleCharacter) -> i
 	
 	return final_damage
 
-func heal(amount: int) -> int:
+func heal(amount: int, source: BattleCharacter = null) -> int:
 	var heal_amount = min(amount, max_hp - current_hp)
 	current_hp += heal_amount
 	return heal_amount
 
 func die():
 	current_hp = 0
-	if owner and owner.pet == self:
-		owner.pet = null
+	if master and master.pet == self:
+		master.pet = null
 
 func gain_exp(amount: int):
 	exp += amount
@@ -114,11 +101,11 @@ func act(battle: CombatManager):
 			pass
 
 func follow_owner(battle: CombatManager):
-	if not owner or not owner.is_alive():
+	if not master or not master.is_alive():
 		attack_nearest(battle)
 		return
 	
-	var target_pos = owner.grid_pos + formation_offset
+	var target_pos = master.grid_pos + formation_offset
 	var grid = battle.battle_grid
 	if grid and grid.is_valid_position(target_pos) and grid.is_walkable(target_pos):
 		if grid_pos != target_pos:
@@ -131,12 +118,12 @@ func follow_owner(battle: CombatManager):
 			return
 
 func guard_owner(battle: CombatManager):
-	if not owner or not owner.is_alive():
+	if not master or not master.is_alive():
 		return
 	
 	# 站在主人前面
 	var grid = battle.battle_grid
-	var guard_pos = owner.grid_pos + Vector2i(-1, 0) if owner.team == 0 else owner.grid_pos + Vector2i(1, 0)
+	var guard_pos = master.grid_pos + Vector2i(-1, 0) if master.team == 0 else master.grid_pos + Vector2i(1, 0)
 	if grid and grid.is_valid_position(guard_pos) and grid.is_walkable(guard_pos):
 		if grid_pos != guard_pos:
 			grid.move_character(self, guard_pos)
@@ -148,24 +135,24 @@ func guard_owner(battle: CombatManager):
 			return
 
 func support_owner(battle: CombatManager):
-	if not owner or not owner.is_alive():
+	if not master or not master.is_alive():
 		return
 	
 	# 治疗主人
-	if owner.current_hp < owner.max_hp * 0.6:
+	if master.current_hp < master.max_hp * 0.6:
 		var heal_skill = get_heal_skill()
 		if heal_skill:
-			var skill = WuxueDatabase.get_wuxue(heal_skill)
+			var skill = WuxueDatabase.instance.get_wuxue(heal_skill)
 			if skill and skill.can_use(self, battle):
-				battle.execute_skill(self, owner, skill)
+				battle.execute_skill(self, master, skill)
 				return
 	
 	# 给主人加buff
 	var buff_skill = get_buff_skill()
 	if buff_skill:
-		var skill = WuxueDatabase.get_wuxue(buff_skill)
+		var skill = WuxueDatabase.instance.get_wuxue(buff_skill)
 		if skill and skill.can_use(self, battle):
-			battle.execute_skill(self, owner, skill)
+			battle.execute_skill(self, master, skill)
 			return
 	
 	# 没有支援技能，跟随
@@ -187,7 +174,7 @@ func attack_nearest(battle: CombatManager):
 func attack_enemy(target: BattleCharacter, battle: CombatManager):
 	var skill_id = get_usable_skill(battle)
 	if skill_id:
-		var skill = WuxueDatabase.get_wuxue(skill_id)
+		var skill = WuxueDatabase.instance.get_wuxue(skill_id)
 		if skill and skill.can_use(self, battle):
 			battle.execute_skill(self, target, skill)
 			return
@@ -197,7 +184,7 @@ func attack_enemy(target: BattleCharacter, battle: CombatManager):
 func get_usable_skill(battle: CombatManager) -> String:
 	var usable = []
 	for skill_id in skills:
-		var skill = WuxueDatabase.get_wuxue(skill_id)
+		var skill = WuxueDatabase.instance.get_wuxue(skill_id)
 		if skill and skill.can_use(self, battle):
 			if prioritize_ultimate and skill.is_ultimate:
 				return skill_id
@@ -208,7 +195,7 @@ func get_usable_skill(battle: CombatManager) -> String:
 	
 	if prioritize_ultimate:
 		for skill_id in usable:
-			var skill = WuxueDatabase.get_wuxue(skill_id)
+			var skill = WuxueDatabase.instance.get_wuxue(skill_id)
 			if skill and skill.is_ultimate:
 				return skill_id
 	
@@ -216,14 +203,14 @@ func get_usable_skill(battle: CombatManager) -> String:
 
 func get_heal_skill() -> String:
 	for skill_id in skills:
-		var skill = WuxueDatabase.get_wuxue(skill_id)
+		var skill = WuxueDatabase.instance.get_wuxue(skill_id)
 		if skill and skill.base_heal > 0:
 			return skill_id
 	return ""
 
 func get_buff_skill() -> String:
 	for skill_id in skills:
-		var skill = WuxueDatabase.get_wuxue(skill_id)
+		var skill = WuxueDatabase.instance.get_wuxue(skill_id)
 		if skill:
 			for eff in skill.effects:
 				if eff.effect_type in ["护盾", "属性加成", "增益", "加状态"]:

@@ -115,7 +115,7 @@ func start_combo(caster: BattleCharacter, combat: CombatManager):
 					step_actor = char
 					break
 		
-		var step_target = target
+		var step_target = caster
 		if step_target_id != "target":
 			if step_target_id == "nearest_enemy":
 				step_target = combat.get_nearest_enemy(step_actor)
@@ -126,7 +126,7 @@ func start_combo(caster: BattleCharacter, combat: CombatManager):
 		
 		if step_actor and step_actor.is_alive() and step_target and step_target.is_alive():
 			if step_skill_id:
-				var skill = WuxueDatabase.get_wuxue(step_skill_id)
+				var skill = WuxueDatabase.instance.get_wuxue(step_skill_id)
 				if skill:
 					var action = BattleAction.new().set_combo_action(step_actor, self, i)
 					combat.action_queue.append(action)
@@ -144,7 +144,7 @@ func execute_combo_step(actor: BattleCharacter, combo_data: Dictionary, step: in
 	var step_skill_id = step_info.get("skill", "")
 	
 	if step_skill_id:
-		var skill = WuxueDatabase.get_wuxue(step_skill_id)
+		var skill = WuxueDatabase.instance.get_wuxue(step_skill_id)
 		if skill:
 			var step_target = combat.get_enemies(actor.team)[0]
 			if step_target:

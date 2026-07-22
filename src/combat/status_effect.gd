@@ -453,7 +453,7 @@ func create_summon(owner: BattleCharacter, summon_id: String, count: int):
 	for i in range(count):
 		var summon = Summon.new()
 		summon.summon_id = summon_id
-		summon.owner = owner
+		summon.master = owner
 		var data = SummonDatabase.get_summon(summon_id)
 		if data:
 			summon.max_hp = data.base_hp
