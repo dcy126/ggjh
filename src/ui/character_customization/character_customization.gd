@@ -5,9 +5,9 @@ class_name CharacterCustomizationUI
 @onready var name_input: LineEdit = %NameInput
 @onready var random_name_btn: Button = %RandomNameBtn
 
-@onready var face_container: VBoxContainer = %FaceContainer
-@onready var body_container: VBoxContainer = %BodyContainer
-@onready var voice_container: VBoxContainer = %VoiceContainer
+@onready var face_container: VBoxContainer = %FaceVBox
+@onready var body_container: VBoxContainer = %BodyVBox
+@onready var voice_container: VBoxContainer = %VoiceVBox
 
 @onready var preset_buttons: GridContainer = %PresetButtons
 @onready var btn_randomize: Button = %BtnRandomize
@@ -124,7 +124,7 @@ func _create_voice_sliders():
 func _create_slider(prop: Dictionary) -> Control:
 	var container = HBoxContainer.new()
 	container.custom_minimum_size = Vector2(0, 30)
-	container.set_meta("prop_name", prop["name"])
+	container.set_meta("prop_name", prop["prop"])
 	
 	var label = Label.new()
 	label.text = prop["label"]

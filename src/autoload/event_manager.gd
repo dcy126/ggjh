@@ -60,6 +60,25 @@ func _add_to_history(event_data: Dictionary):
 	if event_history.size() > max_history:
 		event_history.remove_at(0)
 
+func add_listener(event_name: String, action: Callable) -> bool:
+	if not action.is_valid():
+		push_warning("EventManager: 尝试添加的 Callable 无效 - " + event_name)
+		return false
+		
+	if not event_listeners.has(event_name):
+		event_listeners[event_name] = []
+	
+	# 从 Callable 中提取绑定的对象，以兼容原有的 [listener, callable] 数据结构
+	var listener_obj = action.get_object()
+	
+	# 避免重复添加完全相同的监听
+	for existing in event_listeners[event_name]:
+		if existing[0] == listener_obj and existing[1] == action:
+			return true
+	
+	event_listeners[event_name].append([listener_obj, action])
+	return true
+	
 func _connect_listener(event_name: String, listener: Object, method: String, binds: Array = []) -> bool:
 	if not event_listeners.has(event_name):
 		event_listeners[event_name] = []

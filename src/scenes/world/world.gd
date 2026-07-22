@@ -22,9 +22,9 @@ func _ready():
 	_load_current_area()
 	_setup_shortcuts()
 	
-	TimeManager.get_instance().connect("day_changed", _on_day_changed)
-	TimeManager.get_instance().connect("weather_changed", _on_weather_changed)
-	TimeManager.get_instance().connect("season_changed", _on_season_changed)
+	EventManager.instance.add_listener("day_changed", _on_day_changed)
+	EventManager.instance.add_listener("weather_changed", _on_weather_changed)
+	EventManager.instance.add_listener("season_changed", _on_season_changed)
 
 func _setup_input():
 	# 在 Godot 4 中，动态添加输入映射的标准写法
@@ -74,7 +74,7 @@ func _on_shortcut_pressed(action: String):
 
 func _load_current_area():
 	var area_id = WorldManager.get_instance().current_area
-	if area_id != "":
+	if area_id is String and area_id != "":
 		_enter_area(area_id)
 
 func _enter_area(area_id: String):
